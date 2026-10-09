@@ -18,6 +18,18 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
   const body=await readJSON(request) as Row;
   if(!validMonth(body.month))return reply({error:'Informe uma competência válida.'},400);
   const action=String(body.action||'');
+  if(['minimum_wage','allowance','unimed_rates','uniodonto_fixed_rate'].includes(action)){
+   const revision=Number(body.revision??0);
+   if(!Number.isSafeInteger(revision)||revision<0)return reply({error:'Revisão inválida.'},400);
+   const keys=action==='unimed_rates'?['young','middle','senior']:['amount'];
+   const values=Object.fromEntries(keys.map(key=>[key,body[key]]));
+   if(keys.some(key=>typeof values[key]!=='string'&&typeof values[key]!=='number'))return reply({error:'Preencha os valores da configuração.'},400);
+   const changed=await supabaseAdminRequest<boolean>('/rest/v1/rpc/save_finance_configuration',{
+    method:'POST',body:{p_month:body.month,p_action:action,p_values:values,p_actor:user.email,p_revision:revision}
+   });
+   if(!changed)return reply({error:'Configuração alterada. Atualize antes de salvar.'},409);
+   return reply({ok:true});
+  }
   if(!['close','reopen','commission_close','commission_reopen'].includes(action)){
    return reply({error:'Operação ainda não migrada para o Supabase. Nenhum dado foi alterado.'},503);
   }
