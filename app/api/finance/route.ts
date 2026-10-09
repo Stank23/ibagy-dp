@@ -1,3 +1,4 @@
+import {financePreviewRead} from '@/lib/finance-preview-read';
 import {assertSameOrigin,readJSON,securityError} from '@/lib/request-security';
 import {consumeRateLimit} from '@/lib/rate-limit';
 import {calculationContext} from '@/lib/calculation-context';
@@ -22,6 +23,7 @@ const recurring=['gender','B','C','D','E','F','G','H','I','J','K','L','M','N','P
 function base(data:any){return {...Object.fromEntries(recurring.map(k=>[k,data[k]||''])),receivesVA:data.receivesVA!==false,...Object.fromEntries(Object.entries(data).filter(([k])=>k.startsWith("extra")||["supportGroup","commissionType","healthMembers","receivesPericulosidade","chargeSerefi"].includes(k)))};}
 
 export async function GET(r:Request){
+ if(process.env.VERCEL)return financePreviewRead(r);
  const started=performance.now();
  try{const user=await getChatGPTUser();if(!user)return json({error:'Entre com seu usuário e senha para continuar.'},401);const db=database(),u=new URL(r.url),month=u.searchParams.get('month')||'',employee=u.searchParams.get('employee'),file=u.searchParams.get('file');const isAdmin=await isAdministrator(db,user);
  if(employee&&u.searchParams.get('historyOnly')==='1'){if(!monthOK(month))return json({error:'Competência inválida.'},400);const history=await db.prepare('SELECT r.*,p.status FROM records r JOIN periods p ON p.month=r.month WHERE r.employee=? ORDER BY r.month DESC').bind(employee).all();return json({history:history.results});}
