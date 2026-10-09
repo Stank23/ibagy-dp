@@ -33,7 +33,7 @@ export async function financePreviewRead(request:Request):Promise<Response>{
   const records=monthOK(month)?data.records.filter(r=>r.month===month).sort((a,b)=>String(a.employee).localeCompare(String(b.employee))):[];
   const files=monthOK(month)?data.files.filter(f=>f.month===month):[];
   const audit=isAdmin&&monthOK(month)?data.audit.filter(a=>a.month===month).slice(0,60):[];
-  const history=employee?data.records.filter(r=>r.employee===employee).map(r=>({...r,status:periods.find(p=>p.month===r.month)?.status??null})).sort((a,b)=>String(b.month).localeCompare(String(a.month))):[];
+  const history:Row[]=employee?data.records.filter((r:Row)=>r.employee===employee).map((r:Row):Row=>({...r,status:periods.find((p:Row)=>p.month===r.month)?.status??null})).sort((a:Row,b:Row)=>String(b.month).localeCompare(String(a.month))):[];
   const installmentRows:Row[]=data.installments.map((i:Row)=>({...i,periodStatus:periods.find(p=>p.month===i.month)?.status??null,included:data.records.find(r=>r.month===i.month&&r.employee===i.employee)?.employee??null}));
   return json({unimedRates:data.unimed_rates,uniodontoRates:data.uniodonto_fixed_rates,jobFunctions:data.job_functions.map(r=>r.name),dsrSettings:data.dsr_settings,userName:user.displayName,isAdmin,canEdit:false,periods,employees:latest(),bases:monthOK(month)?latest(month):[],records,files,audit,history,childcareChildren:data.childcare_children,normativeWages:data.normative_wages,minimumWages:data.minimum_wages,settings:data.allowances,eventPlans:data.event_plans,loans:data.loans,installments:installmentRows});
  }catch{console.error('Supabase finance preview read failed');return json({error:'Não foi possível carregar os dados. Tente novamente.'},503);}
