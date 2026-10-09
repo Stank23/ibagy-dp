@@ -51,3 +51,5 @@ next-env.d.ts
 /supabase/.branches/
 /backups/
 *.dump
+/tools/ui-tests/reports/
+/tools/ui-tests/node_modules/
