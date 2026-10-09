@@ -4,6 +4,8 @@ import {localUser} from './local-auth';
 import {supabaseAdminRequest} from './supabase-admin';
 import {jobFunctionName} from './job-functions';
 import {validCPF,formatCPF} from './cpf';
+import {schedule} from './rules';
+import {cents} from './payroll';
 
 type Row=Record<string,unknown>;
 const validMonth=(m:unknown):m is string=>typeof m==='string'&&/^20\d{2}-(0[1-9]|1[0-2])$/.test(m);
@@ -20,6 +22,20 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
   const body=await readJSON(request) as Row;
   if(!validMonth(body.month))return reply({error:'Informe uma competência válida.'},400);
   const action=String(body.action||'');
+  if(action==='loan'){
+   const amount=String(body.amount??'');
+   if(!/^\d{1,8}(\.\d{1,2})?$/.test(amount))return reply({error:'Valor inválido.'},400);
+   const total=cents(amount),count=Number(body.count),employee=body.employee;
+   if(typeof employee!=='string'||employee.length<1||employee.length>120)return reply({error:'Selecione um colaborador.'},400);
+   let parts:ReturnType<typeof schedule>;
+   try{parts=schedule(total,count,body.month);}catch{return reply({error:'Informe valor positivo e de 1 a 120 parcelas.'},400);}
+   const end=parts[parts.length-1].month;
+   if(body.end!==end)return reply({error:'O mês final deve corresponder à quantidade de parcelas.'},400);
+   const id=crypto.randomUUID();
+   const saved=await supabaseAdminRequest<boolean>('/rest/v1/rpc/register_finance_loan',{method:'POST',body:{p_id:id,p_employee:employee,p_month:body.month,p_end:end,p_total:total,p_parts:parts,p_actor:user.email}});
+   if(!saved)return reply({error:'Colaborador inexistente ou competência fechada. Atualize os dados.'},409);
+   return reply({ok:true,id});
+  }
   if(action==='employee'){
    if(body.id)return reply({error:'Edição de colaboradores ainda não integrada. Nenhum dado foi alterado.'},503);
    const data=body.data;
