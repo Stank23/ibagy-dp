@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import './test-module-hooks.mjs';
+const {commissionChanges,saveCommissionChanges}=await import('../lib/commission-save.ts');
+const records=[1,2,3].map(i=>({employee:`test-${i}`,revision:i,values:{P:'Comissão',U:'100.00',commissionNet:'90.00'}}));
+assert.equal(commissionChanges(records,{'test-1':'100'},{},'2026-11',25,5,30).length,0);
+const changes=commissionChanges(records,{'test-1':'120','test-2':'130'},{'test-1':'100','test-2':'110'},'2026-11',25,5,30);
+assert.equal(changes.length,2);assert.equal(changes[0].revision,1);assert.equal(changes[1].month,'2026-11');
+assert.throws(()=>commissionChanges(records,{'test-1':'10'},{'test-1':'100'},'2026-11',25,5,30));
+const calls=[];const failed=await saveCommissionChanges(changes,async body=>{calls.push(body);return body.employee==='test-1'?{ok:true}:null;});
+assert.deepEqual(failed,['test-2']);assert.equal(calls.length,2);assert.equal(changes[1].amount,'130');
+assert.deepEqual(await saveCommissionChanges(changes,async()=>{throw Error('network');}),['test-1','test-2']);
+assert.deepEqual(await saveCommissionChanges(changes,async()=>({ok:true})),[]);
+const screen=readFileSync(new URL('../app/finance-tools.tsx',import.meta.url),'utf8').split('export function CommissionScreen')[1].split('\nconst keys=')[0];
+assert.equal((screen.match(/'Salvar comissões'/g)||[]).length,1);assert.equal(screen.includes('>Salvar</Button>'),false);
+console.log('PASS: um botão, apenas alterações, validação, revisões, falhas parciais e repetição.');

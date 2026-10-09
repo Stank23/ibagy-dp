@@ -18,7 +18,8 @@
     "test:files": "node --experimental-transform-types scripts/test-supabase-files.mjs",
     "test:record-actions": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-supabase-record-actions.mjs",
     "test:employee-edit": "node --experimental-transform-types scripts/test-supabase-employee-edit.mjs",
-    "test:priority-actions": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-supabase-inclusion-dsr.mjs && node --experimental-transform-types scripts/test-supabase-salary-events.mjs"
+    "test:priority-actions": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-supabase-inclusion-dsr.mjs && node --experimental-transform-types scripts/test-supabase-salary-events.mjs",
+    "test:commissions": "node --experimental-transform-types scripts/test-commission-save.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
