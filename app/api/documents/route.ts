@@ -1,9 +1,10 @@
+import {financeDocumentUpload} from '@/lib/supabase-documents';
 import {isAdministrator} from '@/lib/admin';
 import {getChatGPTUser} from '@/app/chatgpt-auth';
 import {database,bucket} from '@/lib/store';
 import {assertSameOrigin,readLimitedBody,securityError} from '@/lib/request-security';
 import {consumeRateLimit} from '@/lib/rate-limit';
-export async function POST(r:Request){try{
+export async function POST(r:Request){if(process.env.VERCEL)return financeDocumentUpload(r);try{
  assertSameOrigin(r);const user=await getChatGPTUser();if(!user)return Response.json({error:'Acesso restrito'},{status:401});const db=database();if(!await isAdministrator(db,user))return Response.json({error:'Acesso restrito'},{status:403});await consumeRateLimit(db,'document-upload',user.userId,10,60000);
  if(!r.headers.get('content-type')?.toLowerCase().startsWith('multipart/form-data;'))return Response.json({error:'Formato de envio inválido.'},{status:415});const bytes=await readLimitedBody(r,16*1024*1024),form=await new Response(bytes as BodyInit,{headers:{'Content-Type':r.headers.get('content-type')!}}).formData(),file=form.get('file'),month=String(form.get('month'));
  if(!(file instanceof File)||!file.size||file.size>15*1024*1024)return Response.json({error:'Selecione um arquivo de até 15 MB.'},{status:400});const name=file.name.replace(/[\x00-\x1f\x7f"\\/]/g,'_').slice(0,200);if(!/\.(pdf|xls|xlsx|csv|doc|docx|txt|png|jpg|jpeg)$/i.test(name))return Response.json({error:'Formato não permitido. Envie PDF, planilha, documento, texto ou imagem PNG/JPG.'},{status:400});if(!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month)||!await db.prepare('SELECT month FROM periods WHERE month=?').bind(month).first())return Response.json({error:'Competência não encontrada'},{status:400});

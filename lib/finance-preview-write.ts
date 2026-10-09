@@ -1,4 +1,5 @@
 import 'server-only';
+import {recordActions,saveRecordAction} from './supabase-record-actions';
 import {assertSameOrigin,readJSON,securityError} from './request-security';
 import {localUser} from './local-auth';
 import {supabaseAdminRequest} from './supabase-admin';
@@ -31,6 +32,15 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
    const saved=action==='record'?await saveEditedRecord(body.month,body.employee as string,body.data,body.revision as number,user.email):await saveCalculatedPeriod(body.month,action,user.email);
    if(!saved)return reply({error:'Competência ou dados alterados. Atualize antes de calcular novamente.'},409);
    return reply({ok:true});
+  }
+  if(recordActions.has(action)){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await saveRecordAction(body,user.email));
+  }
+  if(action==='export'){
+   if(!await reserveAuthAttempt('export',user.userId,10,60000))return reply({error:'Limite de exportações atingido.'},429);
+   const {exportFinanceFile}=await import('./supabase-files');
+   return reply(await exportFinanceFile(body.month,String(body.kind||''),user.email));
   }
   if(action==='loan'){
    const amount=String(body.amount??'');

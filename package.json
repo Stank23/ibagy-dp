@@ -14,7 +14,9 @@
     "db:generate": "drizzle-kit generate",
     "build:vercel": "next build",
     "test:migration": "node scripts/test-payroll-rules.mjs && node scripts/test-supabase-calculation.mjs && node --experimental-transform-types scripts/test-finance-calculation-route.mjs && node scripts/test-calculation-status.mjs",
-    "test:fields": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-field-routes.mjs work/field-tests/all-field-fixtures.json"
+    "test:fields": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-field-routes.mjs work/field-tests/all-field-fixtures.json",
+    "test:files": "node --experimental-transform-types scripts/test-supabase-files.mjs",
+    "test:record-actions": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-supabase-record-actions.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

@@ -16,19 +16,13 @@ export async function supabaseAdminRequest<T>(
   path: string,
   options: { method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'; body?: unknown; prefer?: string } = {},
 ): Promise<T> {
-  if (!baseUrl || !serviceKey) throw new Error('Supabase não configurado no servidor');
-  if (!path.startsWith('/') || path.startsWith('//')) throw new Error('Caminho Supabase inválido');
-  const response = await fetch(new URL(path, baseUrl), {
+  const response = await supabaseServerFetch(path, {
     method: options.method ?? 'GET',
     headers: {
-      apikey: serviceKey,
-      // Legacy service_role is a JWT; modern sb_secret_ keys authenticate via apikey only.
-      ...(serviceKey.startsWith('sb_secret_') ? {} : {Authorization: `Bearer ${serviceKey}`}),
       ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       ...(options.prefer ? { Prefer: options.prefer } : {}),
     },
     ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
-    cache: 'no-store',
   });
   if (!response.ok) {
     // Não retornar detalhes internos nem credenciais ao cliente.
@@ -37,4 +31,13 @@ export async function supabaseAdminRequest<T>(
   if (response.status === 204) return undefined as T;
   const text = await response.text();
   return text ? JSON.parse(text) as T : undefined as T;
+}
+
+/** Binary Storage transport; server-only credentials never returned to callers. */
+export async function supabaseServerFetch(path:string,options:RequestInit={}):Promise<Response>{
+ if(!baseUrl||!serviceKey)throw new Error('Supabase não configurado no servidor');
+ if(!path.startsWith('/')||path.startsWith('//')||path.includes('\\'))throw new Error('Caminho Supabase inválido');
+ const headers=new Headers(options.headers);headers.set('apikey',serviceKey);
+ if(!serviceKey.startsWith('sb_secret_'))headers.set('Authorization',`Bearer ${serviceKey}`);
+ return fetch(new URL(path,baseUrl),{...options,headers,cache:'no-store',redirect:'error'});
 }

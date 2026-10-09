@@ -1,4 +1,5 @@
 import 'server-only';
+import {reserveAuthAttempt} from './supabase-rate-limit';
 import {supabaseAdminRequest} from './supabase-admin';
 import {localUser} from './local-auth';
 
@@ -14,7 +15,8 @@ export async function financePreviewRead(request:Request):Promise<Response>{
   const url=new URL(request.url),month=url.searchParams.get('month')||'',employee=url.searchParams.get('employee');
   if(month&&!monthOK(month))return json({error:'Competência inválida.'},400);
   if(employee&&!validEmployeeId(employee))return json({error:'Identificador de colaborador inválido.'},400);
-  if(url.searchParams.has('file')||url.searchParams.has('terminationMessage'))return json({error:'Esta operação ainda não foi migrada para o ambiente de testes.'},503);
+  if(url.searchParams.has('file')){if(!await reserveAuthAttempt('download',user.userId,40,60000))return json({error:'Limite de downloads atingido.'},429);const {financeFileDownload}=await import('./supabase-files');return await financeFileDownload(url.searchParams.get('file')||'');}
+  if(url.searchParams.has('terminationMessage'))return json({error:'Esta operação ainda não foi migrada para o ambiente de testes.'},503);
   const isAdmin=user.role==='admin';
   if(employee&&url.searchParams.get('historyOnly')==='1'){
    const history=await read('records','&employee=eq.'+q(employee)+'&order=month.desc');

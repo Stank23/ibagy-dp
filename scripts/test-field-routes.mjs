@@ -18,8 +18,8 @@ globalThis.__fieldUser=()=>({userId:'synthetic-admin',email:'admin@example.inval
 globalThis.__fieldRequest=async(path,options={})=>{
  calls.push({path,options});
  if(path.includes('/rpc/')){
-  if(path.endsWith('/finance_calculation_snapshot'))return {snapshot:{...structuredClone(tables),period:tables.periods.find(p=>p.month===options.body.p_month)||null,records:tables.records.filter(r=>r.month===options.body.p_month)},token:'a'.repeat(32)};
-  if(path.endsWith('/save_calculated_finance_period')){
+  if(path.endsWith('/finance_calculation_snapshot')||path.endsWith('/finance_record_action_snapshot'))return {snapshot:{...structuredClone(tables),period:tables.periods.find(p=>p.month===options.body.p_month)||null,records:tables.records.filter(r=>r.month===options.body.p_month)},token:'a'.repeat(32)};
+  if(path.endsWith('/save_calculated_finance_period')||path.endsWith('/save_finance_record_action')){
    for(const record of options.body.p_records){const old=tables.records.find(r=>r.employee===record.employee&&r.month===options.body.p_month);if(old){old.data=record.data;old.revision++;}}
   }
   if(path.endsWith('/save_job_function'))return options.body.p_name;
@@ -35,7 +35,7 @@ registerHooks({
  resolve(s,c,next){if(s==='server-only')return {url:'data:text/javascript,export%20default%20null',shortCircuit:true};return next(s,c);},
  load(url,c,next){
   if(url.endsWith('/lib/local-auth.ts'))return {format:'module',source:'export const localUser=async()=>globalThis.__fieldUser()',shortCircuit:true};
-  if(url.endsWith('/lib/supabase-admin.ts'))return {format:'module',source:'export const supabaseAdminRequest=(...args)=>globalThis.__fieldRequest(...args)',shortCircuit:true};
+  if(url.endsWith('/lib/supabase-admin.ts'))return {format:'module',source:'export const supabaseAdminRequest=(...args)=>globalThis.__fieldRequest(...args);export const supabaseServerFetch=async(path,options={})=>Response.json({public:false})',shortCircuit:true};
   return next(url,c);
  }
 });
@@ -67,9 +67,14 @@ const scenarios=[
  ['normative_wage',{action:'normative_wage',amount:'2000.00'},200,'save_normative_wage'],
  ['unimed_rates',{action:'unimed_rates',young:'200.00',middle:'300.00',senior:'400.00',revision:1},200,'save_finance_configuration'],
  ['uniodonto_fixed_rate',{action:'uniodonto_fixed_rate',amount:'50.00',revision:1},200,'save_finance_configuration'],
+ ['export',{action:'export',kind:'payroll'},200,'save_finance_file'],
  ['loan',{action:'loan',employee:f.employee,amount:'100.00',count:3,end:'2000-04'},200,'register_finance_loan'],
  ...['close','reopen','commission_close','commission_reopen'].map(action=>[action,{action,reason:'Motivo fictício'},200,'transition_finance_period']),
- ...['include','commission_value','dsr_setting','health_base','health_sync','health_copart','health_copart_bulk','health_monthly_bulk','childcare_child','childcare_sync','event_plan','salary_preview','salary_adjust','salary_rows_preview','salary_rows_apply','termination_preview','termination_save','export'].map(action=>[action,{action,employee:f.employee},503,null])
+ ['commission_value',{action:'commission_value',employee:f.employee,revision:1,amount:'100.00',net:'90.00'},200,'save_finance_record_action'],
+ ['health_sync',{action:'health_sync',employee:f.employee,revision:1},200,'save_finance_record_action'],
+ ['health_copart',{action:'health_copart',employee:f.employee,revision:1,amounts:f.raw.healthCopart},200,'save_finance_record_action'],
+ ...['health_copart_bulk','health_monthly_bulk'].map(action=>[action,{action,plan:'unimed',rows:[{employee:f.employee,revision:1,amounts:{'unimed-titular':'10.00'}}]},200,'save_finance_record_action']),
+ ...['include','dsr_setting','health_base','childcare_child','childcare_sync','event_plan','salary_preview','salary_adjust','salary_rows_preview','salary_rows_apply','termination_preview','termination_save'].map(action=>[action,{action,employee:f.employee},503,null])
 ];
 const actions=[];
 for(const [name,body,status,rpc] of scenarios){

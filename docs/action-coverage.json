@@ -80,6 +80,14 @@
     "browser": "BLOCKED_403"
   },
   {
+    "action": "export",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_file",
+    "status": "HTTP_MOCK_PASS",
+    "database": "NOT_VERIFIED_BY_THIS_TEST",
+    "browser": "BLOCKED_403"
+  },
+  {
     "action": "loan",
     "httpStatus": 200,
     "expectedRpc": "register_finance_loan",
@@ -120,15 +128,47 @@
     "browser": "BLOCKED_403"
   },
   {
-    "action": "include",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "action": "commission_value",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_record_action",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
-    "action": "commission_value",
+    "action": "health_sync",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_record_action",
+    "status": "HTTP_MOCK_PASS",
+    "database": "NOT_VERIFIED_BY_THIS_TEST",
+    "browser": "BLOCKED_403"
+  },
+  {
+    "action": "health_copart",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_record_action",
+    "status": "HTTP_MOCK_PASS",
+    "database": "NOT_VERIFIED_BY_THIS_TEST",
+    "browser": "BLOCKED_403"
+  },
+  {
+    "action": "health_copart_bulk",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_record_action",
+    "status": "HTTP_MOCK_PASS",
+    "database": "NOT_VERIFIED_BY_THIS_TEST",
+    "browser": "BLOCKED_403"
+  },
+  {
+    "action": "health_monthly_bulk",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_record_action",
+    "status": "HTTP_MOCK_PASS",
+    "database": "NOT_VERIFIED_BY_THIS_TEST",
+    "browser": "BLOCKED_403"
+  },
+  {
+    "action": "include",
     "httpStatus": 503,
     "expectedRpc": null,
     "status": "NOT_INTEGRATED",
@@ -145,38 +185,6 @@
   },
   {
     "action": "health_base",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
-    "database": "NOT_VERIFIED_BY_THIS_TEST",
-    "browser": "BLOCKED_403"
-  },
-  {
-    "action": "health_sync",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
-    "database": "NOT_VERIFIED_BY_THIS_TEST",
-    "browser": "BLOCKED_403"
-  },
-  {
-    "action": "health_copart",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
-    "database": "NOT_VERIFIED_BY_THIS_TEST",
-    "browser": "BLOCKED_403"
-  },
-  {
-    "action": "health_copart_bulk",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
-    "database": "NOT_VERIFIED_BY_THIS_TEST",
-    "browser": "BLOCKED_403"
-  },
-  {
-    "action": "health_monthly_bulk",
     "httpStatus": 503,
     "expectedRpc": null,
     "status": "NOT_INTEGRATED",
@@ -249,14 +257,6 @@
   },
   {
     "action": "termination_save",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
-    "database": "NOT_VERIFIED_BY_THIS_TEST",
-    "browser": "BLOCKED_403"
-  },
-  {
-    "action": "export",
     "httpStatus": 503,
     "expectedRpc": null,
     "status": "NOT_INTEGRATED",
