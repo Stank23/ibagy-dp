@@ -20,9 +20,16 @@ export async function financePreviewRead(request:Request):Promise<Response>{
    const periods=await read('periods');
    return json({history:history.map(r=>({...r,status:periods.find(p=>p.month===r.month)?.status??null}))});
   }
-  const tables=['periods','employees','versions','records','files','audit','minimum_wages','childcare_children','normative_wages','dsr_settings','unimed_rates','uniodonto_fixed_rates','job_functions','allowances','loans','installments','event_plans'] as const;
+  const tables=['periods','employees','versions','minimum_wages','childcare_children','normative_wages','dsr_settings','unimed_rates','uniodonto_fixed_rates','job_functions','allowances','loans','event_plans'] as const;
   const values=await Promise.all(tables.map(t=>read(t)));
   const data=Object.fromEntries(tables.map((t,i)=>[t,values[i]])) as Record<string,Row[]>;
+  const [records,files,audit,installments]=await Promise.all([
+   monthOK(month)?read('records','&month=eq.'+q(month)+'&order=employee.asc'):Promise.resolve([] as Row[]),
+   monthOK(month)?read('files','&month=eq.'+q(month)+'&select=id,month,kind,name,created&order=created.desc'):Promise.resolve([] as Row[]),
+   isAdmin&&monthOK(month)?read('audit','&month=eq.'+q(month)+'&order=created.desc&limit=60'):Promise.resolve([] as Row[]),
+   read('installments','&order=month.asc,number.asc')
+  ]);
+  data.records=records;data.files=files;data.audit=audit;data.installments=installments;
   const latest=(cutoff?:string):Row[]=>data.employees.flatMap((e:Row):Row[]=>{
    const versions=data.versions.filter(v=>v.employee===e.id&&(!cutoff||v.month<=cutoff)).sort((a,b)=>String(b.month).localeCompare(String(a.month)));
    const v=versions[0];if(!v)return [];
@@ -30,10 +37,9 @@ export async function financePreviewRead(request:Request):Promise<Response>{
    return [{...e,effective:v.month,data:v.data}];
   }).sort((a,b)=>String(a.registration).localeCompare(String(b.registration)));
   const periods:Row[]=data.periods.sort((a:Row,b:Row)=>String(b.month).localeCompare(String(a.month)));
-  const records=monthOK(month)?data.records.filter(r=>r.month===month).sort((a,b)=>String(a.employee).localeCompare(String(b.employee))):[];
-  const files=monthOK(month)?data.files.filter(f=>f.month===month):[];
-  const audit=isAdmin&&monthOK(month)?data.audit.filter(a=>a.month===month).slice(0,60):[];
-  const history:Row[]=employee?data.records.filter((r:Row)=>r.employee===employee).map((r:Row):Row=>({...r,status:periods.find((p:Row)=>p.month===r.month)?.status??null})).sort((a:Row,b:Row)=>String(b.month).localeCompare(String(a.month))):[];
+  // Monthly records, file metadata and audit entries are already scoped server-side.
+  const employeeRecords=employee?await read('records','&employee=eq.'+q(employee)+'&order=month.desc'):[];
+  const history:Row[]=employeeRecords.map((r:Row):Row=>({...r,status:periods.find((p:Row)=>p.month===r.month)?.status??null}));
   const installmentRows:Row[]=data.installments.map((i:Row)=>({...i,periodStatus:periods.find(p=>p.month===i.month)?.status??null,included:data.records.find(r=>r.month===i.month&&r.employee===i.employee)?.employee??null}));
   return json({unimedRates:data.unimed_rates,uniodontoRates:data.uniodonto_fixed_rates,jobFunctions:data.job_functions.map(r=>r.name),dsrSettings:data.dsr_settings,userName:user.displayName,isAdmin,canEdit:false,periods,employees:latest(),bases:monthOK(month)?latest(month):[],records,files,audit,history,childcareChildren:data.childcare_children,normativeWages:data.normative_wages,minimumWages:data.minimum_wages,settings:data.allowances,eventPlans:data.event_plans,loans:data.loans,installments:installmentRows});
  }catch{console.error('Supabase finance preview read failed');return json({error:'Não foi possível carregar os dados. Tente novamente.'},503);}
