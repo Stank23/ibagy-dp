@@ -3,11 +3,28 @@ import {readJSON,securityError} from '@/lib/request-security';
 import {accountEmail} from '@/lib/email';
 import {validPassword,PASSWORD_RULE} from '@/lib/password-policy';
 import {database} from '@/lib/store';
+import {supabaseAdminRequest} from '@/lib/supabase-admin';
+import {reserveAuthAttempt} from '@/lib/supabase-rate-limit';
 import {localUser,passwordHash,digest,hex,equal,checkOrigin,sessionCookie,requestSession} from '@/lib/local-auth';
 export const dynamic='force-dynamic';
 const json=(data:any,status=200,extra:Record<string,string>={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store',...extra}});
 export async function GET(request:Request){const user=await localUser();if(new URL(request.url).searchParams.get('session')==='1')return user?json({authenticated:true,name:user.displayName,role:user.role}):json({authenticated:false,error:'A sessão não foi mantida pelo navegador.'},401);if(!user||user.role!=='admin')return json({error:'Acesso restrito.'},403);const users=await database().prepare('SELECT id,username,name,email,role,active FROM app_users ORDER BY username').all();return json({users:users.results});}
-export async function POST(request:Request){try{checkOrigin(request);const db=database();await consumeRateLimit(db,'auth-request',clientAddress(request),60,60000);const body:any=await readJSON(request,8192);if(typeof body.action!=='string'||body.action.length>30)return json({error:'Operação inválida.'},400);
+export async function POST(request:Request){try{
+checkOrigin(request);
+const body:any=await readJSON(request,8192);
+if(typeof body.action!=='string'||body.action.length>30)return json({error:'Operação inválida.'},400);
+if(body.action==='register'){
+ const ip=clientAddress(request);
+ if(!await reserveAuthAttempt('auth-request',ip,60,60000)||!await reserveAuthAttempt('register-ip',ip,5,900000))return json({error:'Limite de requisições atingido. Aguarde antes de tentar novamente.'},429);
+ const email=accountEmail(body.email),username=String(body.username||'').trim().toLowerCase(),password=String(body.password||''),name=String(body.name||'').trim();
+ if(!/^[a-z0-9._-]{3,60}$/.test(username)||!name||name.length>120)return json({error:'Informe nome e usuário de 3 a 60 caracteres, usando letras, números, ponto, hífen ou sublinhado.'},400);
+ if(!validPassword(password))return json({error:PASSWORD_RULE},400);
+ const salt=hex(crypto.getRandomValues(new Uint8Array(16)));
+ await supabaseAdminRequest('/rest/v1/app_users?on_conflict=username',{method:'POST',body:{id:crypto.randomUUID(),username,name,email,role:'viewer',salt,password_hash:await passwordHash(password,salt),active:2},prefer:'resolution=ignore-duplicates,return=minimal'});
+ return json({ok:true,pending:true,message:'Solicitação recebida. Se o cadastro for novo, aguarde a aprovação do administrador. Se já possui conta, use seu acesso existente.'});
+}
+const db=database();
+await consumeRateLimit(db,'auth-request',clientAddress(request),60,60000);
 if(body.action==='logout'){const token=requestSession(request);if(token&&/^[a-f0-9]{64}$/.test(token))await db.prepare('DELETE FROM app_sessions WHERE token_hash=?').bind(await digest(token)).run();return json({ok:true},200,{'Set-Cookie':sessionCookie('',0)});}
 if(body.action==='register'){
  await consumeRateLimit(db,'register-ip',clientAddress(request),5,900000);
