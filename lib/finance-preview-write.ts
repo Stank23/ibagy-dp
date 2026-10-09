@@ -2,6 +2,7 @@ import 'server-only';
 import {assertSameOrigin,readJSON,securityError} from './request-security';
 import {localUser} from './local-auth';
 import {supabaseAdminRequest} from './supabase-admin';
+import {jobFunctionName} from './job-functions';
 
 type Row=Record<string,unknown>;
 const validMonth=(m:unknown):m is string=>typeof m==='string'&&/^20\d{2}-(0[1-9]|1[0-2])$/.test(m);
@@ -18,6 +19,12 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
   const body=await readJSON(request) as Row;
   if(!validMonth(body.month))return reply({error:'Informe uma competência válida.'},400);
   const action=String(body.action||'');
+  if(action==='job_function'){
+   let functionName:{name:string;key:string};
+   try{functionName=jobFunctionName(body.name);}catch{return reply({error:'Informe uma função válida com até 180 caracteres.'},400);}
+   const name=await supabaseAdminRequest<string>('/rest/v1/rpc/save_job_function',{method:'POST',body:{p_name:functionName.name,p_key:functionName.key,p_actor:user.email,p_month:body.month}});
+   return reply({ok:true,name});
+  }
   if(['minimum_wage','allowance','unimed_rates','uniodonto_fixed_rate'].includes(action)){
    const revision=Number(body.revision??0);
    if(!Number.isSafeInteger(revision)||revision<0)return reply({error:'Revisão inválida.'},400);
