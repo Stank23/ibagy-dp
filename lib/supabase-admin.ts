@@ -22,7 +22,8 @@ export async function supabaseAdminRequest<T>(
     method: options.method ?? 'GET',
     headers: {
       apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
+      // Legacy service_role is a JWT; modern sb_secret_ keys authenticate via apikey only.
+      ...(serviceKey.startsWith('sb_secret_') ? {} : {Authorization: `Bearer ${serviceKey}`}),
       ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       ...(options.prefer ? { Prefer: options.prefer } : {}),
     },
