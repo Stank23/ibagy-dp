@@ -1,4 +1,4 @@
-import {consumeRateLimit,clientAddress} from '@/lib/rate-limit';
+import {clientAddress} from '@/lib/rate-limit';
 import {readJSON,securityError} from '@/lib/request-security';
 import {accountEmail} from '@/lib/email';
 import {validPassword,PASSWORD_RULE} from '@/lib/password-policy';
@@ -23,29 +23,29 @@ if(body.action==='register'){
  await supabaseAdminRequest('/rest/v1/app_users?on_conflict=username',{method:'POST',body:{id:crypto.randomUUID(),username,name,email,role:'viewer',salt,password_hash:await passwordHash(password,salt),active:2},prefer:'resolution=ignore-duplicates,return=minimal'});
  return json({ok:true,pending:true,message:'Solicitação recebida. Se o cadastro for novo, aguarde a aprovação do administrador. Se já possui conta, use seu acesso existente.'});
 }
-const db=database();
-await consumeRateLimit(db,'auth-request',clientAddress(request),60,60000);
-if(body.action==='logout'){const token=requestSession(request);if(token&&/^[a-f0-9]{64}$/.test(token))await db.prepare('DELETE FROM app_sessions WHERE token_hash=?').bind(await digest(token)).run();return json({ok:true},200,{'Set-Cookie':sessionCookie('',0)});}
-if(body.action==='register'){
- await consumeRateLimit(db,'register-ip',clientAddress(request),5,900000);
- const email=accountEmail(body.email),username=String(body.username||'').trim().toLowerCase(),password=String(body.password||''),name=String(body.name||'').trim();if(!/^[a-z0-9._-]{3,60}$/.test(username)||!name||name.length>120)return json({error:'Informe nome e usuário de 3 a 60 caracteres, usando letras, números, ponto, hífen ou sublinhado.'},400);if(!validPassword(password))return json({error:PASSWORD_RULE},400);
- const salt=hex(crypto.getRandomValues(new Uint8Array(16)));await db.prepare("INSERT INTO app_users(id,username,name,email,role,salt,password_hash,active) VALUES(?,?,?,?,'viewer',?,?,2) ON CONFLICT DO NOTHING").bind(crypto.randomUUID(),username,name,email,salt,await passwordHash(password,salt)).run();return json({ok:true,pending:true,message:'Solicitação recebida. Se o cadastro for novo, aguarde a aprovação do administrador. Se já possui conta, use seu acesso existente.'});
+const ip=clientAddress(request);
+if(!await reserveAuthAttempt('auth-request',ip,60,60000))return json({error:'Limite de requisições atingido.'},429);
+if(body.action==='logout'){
+ const token=requestSession(request);
+ if(token&&/^[a-f0-9]{64}$/.test(token))await supabaseAdminRequest('/rest/v1/app_sessions?token_hash=eq.'+await digest(token),{method:'DELETE',prefer:'return=minimal'});
+ return json({ok:true},200,{'Set-Cookie':sessionCookie('',0)});
 }
 if(body.action==='login'){
- await consumeRateLimit(db,'login-ip',clientAddress(request),30,900000);
- const username=String(body.username||'').trim().toLowerCase(),password=String(body.password||'');if(!/^[a-z0-9._-]{3,60}$/.test(username)||password.length>256||!password)return json({error:'Usuário ou senha incorretos.'},401);
- await consumeRateLimit(db,'login-account',username,10,900000);
- const user:any=await db.prepare('SELECT * FROM app_users WHERE username=? AND active=1').bind(username).first(),computed=await passwordHash(password,user?.salt||'invalid-account');if(!user||!equal(computed,user.password_hash))return json({error:'Usuário ou senha incorretos.'},401);
- let currentHash=user.password_hash;
- if(!validPassword(password)){
-  if(!body.newPassword)return json({passwordChangeRequired:true,message:PASSWORD_RULE});if(!validPassword(String(body.newPassword)))return json({error:PASSWORD_RULE},400);const salt=hex(crypto.getRandomValues(new Uint8Array(16))),hash=await passwordHash(String(body.newPassword),salt);
-  const result=await db.prepare('UPDATE app_users SET salt=?,password_hash=? WHERE id=? AND password_hash=? AND active=1').bind(salt,hash,user.id,user.password_hash).run();if(!result.meta.changes)return json({error:'A conta foi alterada. Entre novamente.'},409);await db.prepare('DELETE FROM app_sessions WHERE user_id=?').bind(user.id).run();currentHash=hash;
- }
- const token=hex(crypto.getRandomValues(new Uint8Array(32))),tokenHash=await digest(token),oldToken=requestSession(request),now=Date.now();
- const result=await db.batch([db.prepare('DELETE FROM app_login_attempts WHERE since<?').bind(now-86400000),db.prepare('DELETE FROM app_sessions WHERE expires<=?').bind(now),...(oldToken&&/^[a-f0-9]{64}$/.test(oldToken)?[db.prepare('DELETE FROM app_sessions WHERE token_hash=?').bind(await digest(oldToken))]:[]),db.prepare('INSERT INTO app_sessions(token_hash,user_id,expires) SELECT ?,id,? FROM app_users WHERE id=? AND active=1 AND password_hash=?').bind(tokenHash,now+28800000,user.id,currentHash),db.prepare('DELETE FROM app_sessions WHERE user_id=? AND token_hash IN(SELECT token_hash FROM app_sessions WHERE user_id=? ORDER BY expires DESC,token_hash LIMIT -1 OFFSET 5)').bind(user.id,user.id)]);
- if(!result[result.length-2].meta.changes)return json({error:'A conta foi alterada. Entre novamente.'},409);return json({ok:true},200,{'Set-Cookie':sessionCookie(token)});
+ if(!await reserveAuthAttempt('login-ip',ip,30,900000))return json({error:'Limite de requisições atingido.'},429);
+ const username=String(body.username||'').trim().toLowerCase(),password=String(body.password||'');
+ if(!/^[a-z0-9._-]{3,60}$/.test(username)||!password||password.length>256)return json({error:'Usuário ou senha incorretos.'},401);
+ if(!await reserveAuthAttempt('login-account',username,10,900000))return json({error:'Limite de requisições atingido.'},429);
+ const rows=await supabaseAdminRequest<any[]>('/rest/v1/app_users?select=id,username,name,role,salt,password_hash,active&username=eq.'+encodeURIComponent(username)+'&active=eq.1&limit=1');
+ const user=rows[0],computed=await passwordHash(password,user?.salt||'invalid-account');
+ if(!user||!equal(computed,user.password_hash))return json({error:'Usuário ou senha incorretos.'},401);
+ if(!validPassword(password))return json({passwordChangeRequired:true,message:PASSWORD_RULE});
+ const token=hex(crypto.getRandomValues(new Uint8Array(32))),tokenHash=await digest(token),now=Date.now();
+ const old=requestSession(request);
+ if(old&&/^[a-f0-9]{64}$/.test(old))await supabaseAdminRequest('/rest/v1/app_sessions?token_hash=eq.'+await digest(old),{method:'DELETE'});
+ await supabaseAdminRequest('/rest/v1/app_sessions',{method:'POST',body:{token_hash:tokenHash,user_id:user.id,expires:now+28800000},prefer:'return=minimal'});
+ return json({ok:true},200,{'Set-Cookie':sessionCookie(token)});
 }
-const actor=await localUser();if(!actor||actor.role!=='admin')return json({error:'Acesso restrito.'},403);await consumeRateLimit(db,'account-admin',actor.userId,30,60000);if(body.id!==undefined&&(typeof body.id!=='string'||body.id.length>120))return json({error:'Usuário inválido.'},400);
+const actor=await localUser();if(!actor||actor.role!=='admin')return json({error:'Acesso restrito.'},403);if(!await reserveAuthAttempt('account-admin',actor.userId,30,60000))return json({error:'Limite de requisições atingido.'},429);if(body.id!==undefined&&(typeof body.id!=='string'||body.id.length>120))return json({error:'Usuário inválido.'},400);
 if(body.action==='create'){const email=accountEmail(body.email);if(await db.prepare('SELECT id FROM app_users WHERE email=?').bind(email).first())return json({error:'Este e-mail já está cadastrado.'},409);const username=String(body.username||'').trim().toLowerCase(),password=String(body.password||''),name=String(body.name||'').trim();if(!/^[a-z0-9._-]{3,60}$/.test(username)||!name||name.length>120||!['admin','viewer'].includes(body.role))return json({error:'Preencha nome, usuário (mínimo 3 caracteres), senha e perfil.'},400);if(!validPassword(password))return json({error:PASSWORD_RULE},400);if(await db.prepare('SELECT id FROM app_users WHERE username=?').bind(username).first())return json({error:'Este usuário já existe.'},409);const salt=hex(crypto.getRandomValues(new Uint8Array(16)));await db.prepare('INSERT INTO app_users(id,username,name,email,role,salt,password_hash,active) VALUES(?,?,?,?,?,?,?,1)').bind(crypto.randomUUID(),username,name,email,body.role,salt,await passwordHash(password,salt)).run();return json({ok:true});}
 if(body.action==='email'){const email=accountEmail(body.email),id=String(body.id||'');if(!await db.prepare('SELECT id FROM app_users WHERE id=?').bind(id).first())return json({error:'Usuário não encontrado.'},404);if(await db.prepare('SELECT id FROM app_users WHERE email=? AND id<>?').bind(email,id).first())return json({error:'Este e-mail já está cadastrado.'},409);await db.prepare('UPDATE app_users SET email=? WHERE id=?').bind(email,id).run();return json({ok:true});}
 if(body.action==='password'){const password=String(body.password||'');if(!validPassword(password))return json({error:PASSWORD_RULE},400);const target:any=await db.prepare('SELECT id FROM app_users WHERE id=?').bind(String(body.id)).first();if(!target)return json({error:'Usuário não encontrado.'},404);const salt=hex(crypto.getRandomValues(new Uint8Array(16)));await db.batch([db.prepare('UPDATE app_users SET salt=?,password_hash=? WHERE id=?').bind(salt,await passwordHash(password,salt),target.id),db.prepare('DELETE FROM app_sessions WHERE user_id=?').bind(target.id)]);return json({ok:true,relogin:target.id===actor.userId});}
