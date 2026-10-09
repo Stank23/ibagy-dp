@@ -1,6 +1,6 @@
 import './test-module-hooks.mjs';
 import assert from 'node:assert/strict';
-const {calculatedRecords}=await import('../lib/supabase-calculation.ts');
+const {calculatedRecords,editedRecord}=await import('../lib/supabase-calculation.ts');
 const {calculate}=await import('../lib/finance-service.ts');
 
 const base={B:'TEST-001',C:'Colaboradora fictícia',D:'2021-10-15',K:'3000.00',F:'1980-01-15',gender:'Feminino',receivesVA:true,chargeSerefi:true,
@@ -27,4 +27,13 @@ const twice=await calculatedRecords(recalc,'2026-10','recalculate');
 assert.equal(twice[0].revision,7);assert.deepEqual(JSON.parse(twice[0].data),d,'No doubling of automatic events');
 const partial=await calculatedRecords({...s,versions:[{employee:'test-employee',month:'2026-10',data:JSON.stringify({...base,D:'2026-10-16',receivesVA:false,chargeSerefi:false})}]},'2026-10','period');
 const p=JSON.parse(partial[0].data);assert.equal(p.salaryCompetencia,'1500.00');assert.equal(p.AP,'0.00');assert.equal(p.AL,'0.00');assert.equal(p.M,'0.00');
-console.log('PASS: full v77 engine parity, 17 financial/health outputs, eligibility, source immutability, closed period, invalid month, idempotent events, revisions, partial admission and exemptions');
+const editing={...recalc,records:[{employee:'test-employee',revision:7,data:JSON.stringify({...d,paid20:true,commissionType:'',P:''})}]};
+const edited=await editedRecord(editing,'2026-10','test-employee',{...d,P:'',commissionType:'',AF:'02:30',U:'999.00',paid20:false},7);
+const ed=JSON.parse(edited[0].data);assert.equal(ed.AF,'02:30');assert.equal(ed.U,'200.00');assert.equal(ed.commissionNet,'180.00');assert.equal(ed.paid20,true);assert.equal(ed.CK,'15.00');assert.equal(edited[0].revision,7);
+await assert.rejects(editedRecord(editing,'2026-10','test-employee',{...d,B:'changed'},7),/matrícula/);
+await assert.rejects(editedRecord(editing,'2026-10','test-employee',d,6),/alterado/);
+await assert.rejects(editedRecord(editing,'2026-10','test-employee',{...d,CK:'0.00'},7),/parcelas automáticas/);
+await assert.rejects(editedRecord({...editing,period:{status:'closed'}},'2026-10','test-employee',d,7));
+await assert.rejects(editedRecord({...editing,records:[{employee:'test-employee',revision:7,data:JSON.stringify({...d,_excluded:true})}]},'2026-10','test-employee',d,7),/Reinclua/);
+assert.equal(JSON.parse(editing.records[0].data).AF,undefined,'Original record is not mutated');
+console.log('PASS: full v77 engine parity, financial/health outputs, eligibility, immutable inputs, closed/invalid periods, idempotent events, revisions, admission/exemptions and record editing with locked commission, hours, fixed registration and excluded records');

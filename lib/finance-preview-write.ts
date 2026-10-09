@@ -6,8 +6,8 @@ import {jobFunctionName} from './job-functions';
 import {validCPF,formatCPF} from './cpf';
 import {schedule} from './rules';
 import {cents} from './payroll';
-import {saveCalculatedPeriod} from './supabase-calculation-store';
-import {CalculationConflict} from './supabase-calculation';
+import {saveCalculatedPeriod,saveEditedRecord} from './supabase-calculation-store';
+import {CalculationConflict,CalculationInputError} from './supabase-calculation';
 import {reserveAuthAttempt} from './supabase-rate-limit';
 
 type Row=Record<string,unknown>;
@@ -25,9 +25,10 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
   const body=await readJSON(request) as Row;
   if(!validMonth(body.month))return reply({error:'Informe uma competência válida.'},400);
   const action=String(body.action||'');
-  if(action==='period'||action==='recalculate'){
+  if(action==='period'||action==='recalculate'||action==='record'){
    if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido. Aguarde antes de tentar novamente.'},429);
-   const saved=await saveCalculatedPeriod(body.month,action,user.email);
+   if(action==='record'&&(typeof body.employee!=='string'||body.employee.length<1||body.employee.length>120||typeof body.revision!=='number'||!Number.isSafeInteger(body.revision)||body.revision<1))return reply({error:'Lançamento ou revisão inválidos.'},400);
+   const saved=action==='record'?await saveEditedRecord(body.month,body.employee as string,body.data,body.revision as number,user.email):await saveCalculatedPeriod(body.month,action,user.email);
    if(!saved)return reply({error:'Competência ou dados alterados. Atualize antes de calcular novamente.'},409);
    return reply({ok:true});
   }
@@ -94,6 +95,7 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
   return reply({ok:true});
  }catch(e){
   if(e instanceof CalculationConflict)return reply({error:e.message},409);
+  if(e instanceof CalculationInputError)return reply({error:e.message},400);
   const security=securityError(e);if(security)return security;
   console.error('Finance preview state transition failed');
   return reply({error:'Não foi possível salvar a alteração. Atualize os dados antes de tentar novamente.'},503);

@@ -2,13 +2,13 @@ import './test-module-hooks.mjs';
 import {registerHooks} from 'node:module';
 import assert from 'node:assert/strict';
 let user={userId:'synthetic-admin',email:'admin@example.invalid',role:'admin'};
-let calls=[],result=true,period=null,limited=false,fail=false;
+let calls=[],result=true,period=null,limited=false,fail=false,records=[];
 globalThis.__financeTestUser=()=>user;
 globalThis.__financeTestRequest=async(path,options)=>{
  calls.push({path,options});
  if(path.endsWith('/reserve_auth_attempt'))return !limited;
  if(fail)throw Error('Sensitive internal database details');
- if(path.endsWith('/finance_calculation_snapshot'))return {token:'a'.repeat(32),snapshot:{period,employees:[],versions:[],records:[],allowances:[],minimum_wages:[],normative_wages:[],unimed_rates:[],uniodonto_fixed_rates:[],installments:[],event_plans:[],childcare_children:[]}};
+ if(path.endsWith('/finance_calculation_snapshot'))return {token:'a'.repeat(32),snapshot:{period,employees:[],versions:[],records,allowances:[],minimum_wages:[],normative_wages:[],unimed_rates:[],uniodonto_fixed_rates:[],installments:[],event_plans:[],childcare_children:[]}};
  return result;
 };
 registerHooks({
@@ -33,6 +33,13 @@ assert.equal(calls.length,3);assert.equal(calls[2].options.body.p_actor,'admin@e
 result=false;assert.equal((await run({action:'period',month:'2026-10'})).status,409);result=true;
 period={status:'open',commission_status:'closed'};assert.equal((await run({action:'period',month:'2026-10'})).status,409);assert.equal(calls.length,2);
 assert.equal((await run({action:'recalculate',month:'2026-10'})).status,200);assert.equal(calls[2].options.body.p_action,'recalculate');
+const values={B:'TEST-RECORD',C:'Pessoa fictícia',D:'2021-01-01',K:'1000.00',receivesVA:false,chargeSerefi:false,P:'',commissionType:''};
+records=[{employee:'synthetic-employee',revision:3,data:JSON.stringify(values)}];
+assert.equal((await run({action:'record',month:'2026-10',employee:'synthetic-employee',revision:3,data:{...values,AF:'02:30'}})).status,200);
+assert.equal(calls[2].options.body.p_action,'record');assert.equal(calls[2].options.body.p_records.length,1);assert.equal(calls[2].options.body.p_records[0].revision,3);
+assert.equal((await run({action:'record',month:'2026-10',employee:'synthetic-employee',revision:2,data:values})).status,409);assert.equal(calls.length,2);
+assert.equal((await run({action:'record',month:'2026-10',employee:'synthetic-employee',revision:3,data:{...values,B:'changed'}})).status,400);assert.equal(calls.length,2);
+assert.equal((await run({action:'record',month:'2026-10',employee:'synthetic-employee',revision:'3',data:values})).status,400);assert.equal(calls.length,1);
 period={status:'closed',commission_status:'closed'};assert.equal((await run({action:'recalculate',month:'2026-10'})).status,409);assert.equal(calls.length,2);
 fail=true;const failed=await run({action:'recalculate',month:'2026-10'});assert.equal(failed.status,503);assert.ok(!(await failed.text()).includes('Sensitive'));
-console.log('PASS: finance route origin, login, admin, month, rate limit, calculated RPC, actor, conflicts, closed period, no-store and sanitized errors (HTTP mocks; not browser E2E)');
+console.log('PASS: finance route origin, login, admin, month, rate limit, calculated/edit RPC, actor, input/revision validation, conflicts, closed period, no-store and sanitized errors (HTTP mocks; not browser E2E)');

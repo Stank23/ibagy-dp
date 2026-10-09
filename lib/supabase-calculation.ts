@@ -1,8 +1,13 @@
 import {calculate} from './finance-service';
 import {validMonth} from './rules';
+import {normalize} from './payroll';
+import {commissionFinancialKeys} from './commission';
+import {applyProvisions} from './provisions';
+import {preserveCommission} from './period-locks';
 
 type Row = Record<string, any>;
 export class CalculationConflict extends Error {}
+export class CalculationInputError extends Error {}
 export type CalculationSnapshot = {
   period: Row | null;
   employees: Row[];
@@ -55,4 +60,30 @@ export async function calculatedRecords(snapshot: CalculationSnapshot, month: st
     return [{employee:e.id,data:version.data,revision:0}];
   });
   return Promise.all(source.map(async row=>({employee:row.employee,revision:row.revision,data:JSON.stringify(await calculate(null,JSON.parse(row.data),row.employee,month,context))})));
+}
+
+/** Record-edit rules copied from the v77 finance route, including locked commission. */
+export async function editedRecord(snapshot:CalculationSnapshot,month:string,employee:string,input:unknown,revision:number) {
+  if (!validMonth(month)||!employee||!Number.isSafeInteger(revision)||revision<1) throw new CalculationInputError('Lançamento ou revisão inválidos.');
+  if (snapshot.period?.status!=='open') throw new CalculationConflict('Reabra a competência antes de editar os lançamentos.');
+  const previous=snapshot.records.find(r=>r.employee===employee);
+  if (!previous||previous.revision!==revision) throw new CalculationConflict('Registro alterado. Atualize antes de salvar.');
+  const old=JSON.parse(previous.data);
+  if (old._excluded===true) throw new CalculationConflict('Reinclua o colaborador na folha antes de editar os lançamentos.');
+  let d;
+  try { d=normalize(input); } catch(e) { throw new CalculationInputError(e instanceof Error?e.message:'Dados inválidos.'); }
+  if (d.B!==old.B) throw new CalculationInputError('A matrícula não pode ser alterada no lançamento.');
+  for (const key of ['P','commissionType','supportGroup','gender','receivesChildcare','lastWorkedDay','healthMembers','healthCopart','healthMonthlyAdditions','_active']) d[key]=old[key];
+  d._serefiAuto=old._serefiAuto||0;
+  for (const key of ['CK','AM']) {
+    d['_eventAuto'+key]=old['_eventAuto'+key]||0;
+    if (Number(d[key]||0)*100<d['_eventAuto'+key]) throw new CalculationInputError('O valor não pode ser menor que as parcelas automáticas desta competência.');
+  }
+  d.receivesVA=old.receivesVA!==false; d.chargeSerefi=old.chargeSerefi!==false;
+  d=await calculate(null,d,employee,month,snapshotContext(snapshot));
+  const values=input as Record<string,unknown>;
+  d.paid20=Boolean(values.paid20); d.paymentDate=String(values.paymentDate||''); d.paymentStatus=values.paymentStatus==='paid'?'paid':'pending';
+  for (const key of commissionFinancialKeys) if (Object.hasOwn(old,key)) d[key]=old[key];
+  d=applyProvisions(preserveCommission(d,old,snapshot.period));
+  return [{employee,revision,data:JSON.stringify(d)}];
 }

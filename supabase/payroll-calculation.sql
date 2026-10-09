@@ -28,7 +28,7 @@ returns boolean language plpgsql security invoker set search_path='' as $$
 declare current_state jsonb; item jsonb; expected_count integer; expected_ids jsonb; supplied_ids jsonb;
 begin
  if p_month is null or p_month !~ '^20[0-9]{2}-(0[1-9]|1[0-2])$'
-    or p_action is null or p_action not in ('period','recalculate')
+    or p_action is null or p_action not in ('period','recalculate','record')
     or p_actor is null or length(p_actor) not between 1 and 200
     or p_token is null or p_token !~ '^[a-f0-9]{32}$'
     or p_records is null or jsonb_typeof(p_records)<>'array' then raise exception 'Invalid calculation request'; end if;
@@ -47,7 +47,13 @@ begin
     and left(v.data::jsonb->>'D',7)<=p_month);
  else
   if not exists(select 1 from public.periods where month=p_month and status='open') then return false; end if;
-  select coalesce(jsonb_agg(employee order by employee),'[]'::jsonb) into expected_ids from public.records where month=p_month;
+  if p_action='record' then
+   if jsonb_array_length(p_records)<>1 then return false; end if;
+   select coalesce(jsonb_agg(employee order by employee),'[]'::jsonb) into expected_ids from public.records
+    where month=p_month and employee=p_records->0->>'employee' and coalesce(data::jsonb->>'_excluded','false')<>'true';
+  else
+   select coalesce(jsonb_agg(employee order by employee),'[]'::jsonb) into expected_ids from public.records where month=p_month;
+  end if;
  end if;
  select coalesce(jsonb_agg(r->>'employee' order by r->>'employee'),'[]'::jsonb) into supplied_ids from jsonb_array_elements(p_records) r;
  if supplied_ids is distinct from expected_ids then return false; end if;
@@ -55,7 +61,7 @@ begin
   if jsonb_typeof(item->'data') is distinct from 'string' or jsonb_typeof((item->>'data')::jsonb) is distinct from 'object'
     or coalesce(item->>'revision','') !~ '^[0-9]+$' then raise exception 'Invalid calculated record'; end if;
   if p_action='period' and (item->>'revision')::integer<>0 then return false; end if;
-  if p_action='recalculate' and not exists(select 1 from public.records where month=p_month and employee=item->>'employee' and revision=(item->>'revision')::integer) then return false; end if;
+  if p_action<>'period' and not exists(select 1 from public.records where month=p_month and employee=item->>'employee' and revision=(item->>'revision')::integer) then return false; end if;
  end loop;
  if p_action='period' then
   insert into public.periods(month,status,commission_status) values(p_month,'open','open');
@@ -65,8 +71,9 @@ begin
    from jsonb_array_elements(p_records) i where r.month=p_month and r.employee=i.value->>'employee';
  end if;
  insert into public.audit(id,month,action,actor,created,detail) values(gen_random_uuid()::text,p_month,
-  case p_action when 'period' then 'Competência aberta' else 'Valores automáticos atualizados' end,
-  p_actor,now()::text,jsonb_build_object('employees',jsonb_array_length(p_records),'engine','v77')::text);
+  case p_action when 'period' then 'Competência aberta' when 'record' then 'Lançamento atualizado' else 'Valores automáticos atualizados' end,
+  p_actor,now()::text,(jsonb_build_object('employees',jsonb_array_length(p_records),'engine','v77')||
+   case when p_action='record' then jsonb_build_object('employee',p_records->0->>'employee','revision',(p_records->0->>'revision')::integer+1) else '{}'::jsonb end)::text);
  return true;
 end $$;
 revoke all on function public.save_calculated_finance_period(text,text,text,text,jsonb) from public,anon,authenticated;
