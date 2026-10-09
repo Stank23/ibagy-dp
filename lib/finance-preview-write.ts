@@ -3,6 +3,7 @@ import {assertSameOrigin,readJSON,securityError} from './request-security';
 import {localUser} from './local-auth';
 import {supabaseAdminRequest} from './supabase-admin';
 import {jobFunctionName} from './job-functions';
+import {validCPF,formatCPF} from './cpf';
 
 type Row=Record<string,unknown>;
 const validMonth=(m:unknown):m is string=>typeof m==='string'&&/^20\d{2}-(0[1-9]|1[0-2])$/.test(m);
@@ -19,6 +20,20 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
   const body=await readJSON(request) as Row;
   if(!validMonth(body.month))return reply({error:'Informe uma competência válida.'},400);
   const action=String(body.action||'');
+  if(action==='employee'){
+   if(body.id)return reply({error:'Edição de colaboradores ainda não integrada. Nenhum dado foi alterado.'},503);
+   const data=body.data;
+   if(!data||typeof data!=='object'||Array.isArray(data))return reply({error:'Cadastro inválido.'},400);
+   const d={...(data as Row)};
+   if(typeof d.E!=='string'||!validCPF(d.E))return reply({error:'CPF inválido. Confira os dígitos antes de cadastrar.'},400);
+   if(typeof d.B!=='string'||!d.B.trim()||typeof d.C!=='string'||!d.C.trim()||typeof d.H!=='string'||!d.H.trim()||typeof d.D!=='string'||!/^20\d{2}-(0[1-9]|1[0-2])-[0-3]\d$/.test(d.D))return reply({error:'Preencha matrícula, nome, data de admissão e filial.'},400);
+   if(d.B.length>80||d.C.length>180||d.H.length>120)return reply({error:'Cadastro excede o tamanho permitido.'},400);
+   d.E=formatCPF(d.E);d.AG='0.00';d.receivesVA=d.receivesVA!==false;
+   const id=crypto.randomUUID();
+   const saved=await supabaseAdminRequest<boolean>('/rest/v1/rpc/register_finance_employee',{method:'POST',body:{p_id:id,p_registration:d.B,p_month:body.month,p_effective:d.D.slice(0,7),p_data:d,p_actor:user.email,p_active:body.active===false?0:1}});
+   if(!saved)return reply({error:'CPF ou matrícula já cadastrado.'},409);
+   return reply({ok:true,id});
+  }
   if(action==='job_function'){
    let functionName:{name:string;key:string};
    try{functionName=jobFunctionName(body.name);}catch{return reply({error:'Informe uma função válida com até 180 caracteres.'},400);}
