@@ -1,40 +1,41 @@
-# IBAGY · Departamento Pessoal
+# [SheetJS](https://sheetjs.com)
 
-Sistema de controle financeiro de pessoal para uma empresa: colaboradores, lançamentos, comissões, DSR, planos de saúde, empréstimos SEREFI, rescisões, conferência da folha, custos, provisões e exportações para contabilidade.
+The SheetJS Community Edition offers battle-tested open-source solutions for
+extracting useful data from almost any complex spreadsheet and generating new
+spreadsheets that will work with legacy and modern software alike.
 
-## Estado atual
+[SheetJS Pro](https://sheetjs.com/pro) offers solutions beyond data processing:
+Edit complex templates with ease; let out your inner Picasso with styling; make
+custom sheets with images/graphs/PivotTables; evaluate formula expressions and
+port calculations to web apps; automate common spreadsheet tasks, and much more!
 
-- Código importado da versão publicada em 08/10/2026, commit de origem `5caf1bb7ecf989a79a805bf7200e8efba065194f`.
-- Aplicação React/Vinext, hospedada em Cloudflare Workers pelo Sites.
-- Banco em uso: Cloudflare D1 (SQLite). Arquivos: Cloudflare R2.
-- Migração para Supabase iniciada: 22 tabelas criadas no schema privado `ibagy` do projeto DP - Ibagy. **O site ainda não usa o Supabase.**
-- Nenhum dado do banco, arquivo anexado, chave de produção ou token de sessão é incluído nesta cópia do código.
+## Documentation
 
-## Desenvolvimento
+- [API and Usage Documentation](https://docs.sheetjs.com)
 
-Use Node.js >=22.13 e a versão do pnpm indicada em package.json.
+- [Downloadable Scripts and Modules](https://cdn.sheetjs.com)
 
-```sh
-pnpm install
-pnpm dev
-pnpm exec tsc --noEmit
-pnpm build
-```
+## Constellation
 
-O ambiente de desenvolvimento exige as configurações Cloudflare D1/R2 e as migrações correspondentes. Consulte scripts/ e .openai/hosting.json. Não substitua IDs de recursos gerenciados nem reaplique migrações históricas em produção.
+- <https://oss.sheetjs.com/notes/>: File Format Notes
 
-## Supabase
+- [`ssf`](packages/ssf): Format data using ECMA-376 spreadsheet format codes
 
-Os SQLs em supabase/ reproduzem a estrutura já preparada no projeto, sem copiar os dados. Leia supabase/README.md antes de executá-los. As migrações antigas em drizzle/ são de SQLite, contêm sementes de teste e **não devem ser executadas no PostgreSQL**.
+- [`xlsx-cli`](packages/xlsx-cli): NodeJS command-line tool for processing files
 
-Ainda faltam a adaptação das consultas e transações, a configuração segura do acesso do servidor, a transferência dos dados e os testes de equivalência dos cálculos. O login próprio da aplicação continua ativo durante a transição.
+- [`cfb`](https://git.sheetjs.com/SheetJS/js-cfb): Container (OLE/ZIP) file
+processing library
 
-## Segurança
+- [`codepage`](https://git.sheetjs.com/SheetJS/js-codepage): Legacy text
+encodings for XLS and other legacy spreadsheet formats
 
-Credenciais ficam exclusivamente na configuração secreta do servidor. Não use NEXT_PUBLIC_ para chaves secretas. Não publique .env, dumps do banco nem backups de arquivos.
+- [`dta`](packages/dta): Stata DTA file processor
 
-Consulte docs/security-review.md para as proteções implementadas e limitações conhecidas.
+- [`test_files`](https://github.com/sheetjs/test_files): Test files and various
+plaintext baselines.
 
-## Relação com o site publicado
+## License
 
-Este repositório guarda o código completo. O envio ao GitHub, por si só, não publica mudanças no site. A hospedagem Sites continua usando seu fluxo próprio; a sincronização entre os dois repositórios deve ser realizada explicitamente.
+Please consult the attached LICENSE file for details.  All rights not explicitly
+granted by the Apache 2.0 License are reserved by the Original Author.
+

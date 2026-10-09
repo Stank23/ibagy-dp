@@ -1,67 +1,183 @@
 {
-  "name": "site-creator-vinext-starter",
-  "version": "0.1.0",
-  "private": true,
-  "engines": {
-    "node": ">=22.13.0"
-  },
-  "scripts": {
-    "install:ci": "bash scripts/install-pnpm.sh",
-    "dev": "node scripts/run-framework.mjs dev",
-    "build": "node scripts/run-framework.mjs build",
-    "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
-  },
-  "dependencies": {
-    "@base-ui/react": "^1.7.0",
-    "@hookform/resolvers": "^5.7.1",
-    "@shadcn/react": "^0.3.0",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
-    "cmdk": "^1.1.1",
-    "date-fns": "^4.4.0",
-    "drizzle-orm": "0.45.2",
-    "embla-carousel-react": "^8.6.0",
-    "input-otp": "^1.4.2",
-    "lucide-react": "^1.31.0",
-    "next": "16.3.8",
-    "next-themes": "^0.4.6",
-    "radix-ui": "^1.6.7",
-    "react": "19.2.8",
-    "react-day-picker": "^10.0.1",
-    "react-dom": "19.2.8",
-    "react-hook-form": "^7.85.0",
-    "react-resizable-panels": "^4.12.2",
-    "recharts": "^3.8.0",
-    "sonner": "^2.0.8",
-    "tailwind-merge": "3.6.0",
-    "vaul": "^1.1.2",
-    "xlsx": "file:vendor/xlsx-0.20.3.tgz",
-    "zod": "^3.25.76"
-  },
-  "devDependencies": {
-    "@cloudflare/vite-plugin": "1.37.1",
-    "@cloudflare/workers-types": "4.20260515.1",
-    "@tailwindcss/postcss": "4.2.1",
-    "@types/node": "22.19.19",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
-    "@vitejs/plugin-rsc": "0.5.26",
-    "drizzle-kit": "0.31.10",
-    "eslint": "9.39.4",
-    "eslint-config-next": "16.3.8",
-    "json-rpc-2.0": "1.7.1",
-    "raw-body": "3.0.2",
-    "react-server-dom-webpack": "19.2.8",
-    "tailwindcss": "4.2.1",
-    "tw-animate-css": "^1.4.0",
-    "typescript": "5.9.3",
-    "vinext": "1.0.0-beta.5",
-    "vite": "8.0.16",
-    "wrangler": "4.92.0"
-  },
-  "type": "module",
-  "packageManager": "pnpm@11.25.0"
+	"name": "xlsx",
+	"version": "0.20.3",
+	"author": "sheetjs",
+	"description": "SheetJS Spreadsheet data parser and writer",
+	"keywords": [
+		"excel",
+		"xls",
+		"xlsx",
+		"xlsb",
+		"xlsm",
+		"ods",
+		"csv",
+		"dbf",
+		"dif",
+		"sylk",
+		"office",
+		"spreadsheet"
+	],
+	"bin": {
+		"xlsx": "./bin/xlsx.njs"
+	},
+	"main": "xlsx.js",
+	"module": "xlsx.mjs",
+	"unpkg": "dist/xlsx.full.min.js",
+	"jsdelivr": "dist/xlsx.full.min.js",
+	"types": "types/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./xlsx.mjs",
+			"require": "./xlsx.js",
+			"types": "./types/index.d.ts"
+		},
+		"./xlsx.mjs": {
+			"import": "./xlsx.mjs",
+			"types": "./types/index.d.ts"
+		},
+		"./xlsx.js": {
+			"require": "./xlsx.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.core.min": {
+			"import": "./dist/xlsx.core.min.js",
+			"require": "./dist/xlsx.core.min.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.core.min.js": {
+			"import": "./dist/xlsx.core.min.js",
+			"require": "./dist/xlsx.core.min.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.full.min": {
+			"import": "./dist/xlsx.full.min.js",
+			"require": "./dist/xlsx.full.min.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.full.min.js": {
+			"import": "./dist/xlsx.full.min.js",
+			"require": "./dist/xlsx.full.min.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.mini.min": {
+			"import": "./dist/xlsx.mini.min.js",
+			"require": "./dist/xlsx.mini.min.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.mini.min.js": {
+			"import": "./dist/xlsx.mini.min.js",
+			"require": "./dist/xlsx.mini.min.js",
+			"types": "./types/index.d.ts"
+		},
+		"./dist/xlsx.zahl": {
+			"import": "./dist/xlsx.zahl.mjs",
+			"require": "./dist/xlsx.zahl.js",
+			"types": "./dist/zahl.d.ts"
+		},
+		"./dist/xlsx.zahl.mjs": {
+			"import": "./dist/xlsx.zahl.mjs",
+			"types": "./dist/zahl.d.ts"
+		},
+		"./dist/xlsx.zahl.js": {
+			"require": "./dist/xlsx.zahl.js",
+			"types": "./dist/zahl.d.ts"
+		},
+		"./dist/cpexcel": {
+			"import": "./dist/cpexcel.full.mjs",
+			"require": "./dist/cpexcel.js",
+			"types": "./dist/cpexcel.d.ts"
+		},
+		"./dist/cpexcel.js": {
+			"require": "./dist/cpexcel.js",
+			"types": "./dist/cpexcel.d.ts"
+		},
+		"./dist/cpexcel.full": {
+			"import": "./dist/cpexcel.full.mjs",
+			"require": "./dist/cpexcel.js",
+			"types": "./dist/cpexcel.d.ts"
+		},
+		"./dist/cpexcel.full.mjs": {
+			"import": "./dist/cpexcel.full.mjs",
+			"types": "./dist/cpexcel.d.ts"
+		}
+	},
+	"browser": {
+		"buffer": false,
+		"crypto": false,
+		"stream": false,
+		"process": false,
+		"fs": false
+	},
+	"sideEffects": false,
+	"dependencies": {
+	},
+	"devDependencies": {
+		"@sheetjs/uglify-js": "~2.7.3",
+		"@types/node": "^8.5.9",
+		"acorn": "7.4.1",
+		"adler-32": "~1.3.1",
+		"alex": "8.1.1",
+		"blanket": "~1.2.3",
+		"cfb": "~1.2.2",
+		"codepage": "~1.15.0",
+		"commander": "~2.17.1",
+		"crc-32": "~1.2.2",
+		"dtslint": "^0.1.2",
+		"eslint": "7.23.0",
+		"eslint-plugin-html": "^6.1.2",
+		"eslint-plugin-json": "^2.1.2",
+		"exit-on-epipe": "~1.0.1",
+		"fflate": "^0.7.1",
+		"jsdom": "~11.1.0",
+		"markdown-spellcheck": "^1.3.1",
+		"mocha": "~2.5.3",
+		"sinon": "^1.17.7",
+		"ssf": "~0.11.2",
+		"typescript": "2.2.0",
+		"wmf": "~1.0.1",
+		"word": "~0.3.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://git.sheetjs.com/SheetJS/sheetjs"
+	},
+	"scripts": {
+		"pretest": "npm run lint",
+		"test": "npm run tests-only",
+		"pretest-only": "git submodule init && git submodule update",
+		"tests-only": "make travis",
+		"build": "make",
+		"lint": "make fullint",
+		"dtslint": "dtslint types"
+	},
+	"config": {
+		"blanket": {
+			"pattern": "xlsx.js"
+		}
+	},
+	"alex": {
+		"allow": [
+			"chinese",
+			"special",
+			"simple",
+			"just",
+			"crash",
+			"wtf",
+			"holes"
+		]
+	},
+	"homepage": "https://sheetjs.com/",
+	"files": [
+		"CHANGELOG.md", "LICENSE", "README.md", "bower.json", "package.json", "xlsx.js", "xlsx.mjs", "xlsxworker.js",
+		"bin/xlsx.njs",
+		"dist/LICENSE", "dist/*.mjs", "dist/*.js", "dist/*.map", "dist/*.d.ts",
+		"types/index.d.ts", "types/tsconfig.json"
+	],
+	"bugs": {
+		"url": "https://git.sheetjs.com/SheetJS/sheetjs/issues"
+	},
+	"license": "Apache-2.0",
+	"engines": {
+		"node": ">=0.8"
+	}
 }
