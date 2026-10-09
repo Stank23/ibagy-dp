@@ -42,7 +42,7 @@ export default function Workspace({initialView='overview'}:{initialView?:string}
  const requestId=useRef(0),loadController=useRef<AbortController|null>(null),loadedMonth=useRef<string|null>(null);
  useEffect(()=>()=>loadController.current?.abort(),[]);
  const [sessionRole,setSessionRole]=useState<string|null>(null);
- useEffect(()=>{const controller=new AbortController();fetch('/api/auth?session=1',{credentials:'same-origin',cache:'no-store',signal:controller.signal}).then(r=>r.ok?r.json():null).then(j=>{if(j?.authenticated)setSessionRole(j.role);}).catch(()=>{});return()=>controller.abort();},[]);
+ useEffect(()=>{const controller=new AbortController();fetch('/api/auth?session=1',{credentials:'same-origin',cache:'no-store',signal:controller.signal}).then(r=>r.ok?r.json():null).then((j:unknown)=>{if(j&&typeof j==='object'&&'authenticated' in j&&j.authenticated===true&&'role' in j&&typeof j.role==='string')setSessionRole(j.role);}).catch(()=>{});return()=>controller.abort();},[]);
  const adminAccess=data.isAdmin===true||sessionRole==='admin';
  const editableAccess=adminAccess&&data.canEdit===true;
  const dataLoaded=Boolean(loadedMonth.current)&&!error;
