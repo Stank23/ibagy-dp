@@ -1,4 +1,5 @@
 import {financePreviewRead} from '@/lib/finance-preview-read';
+import {financePreviewWrite} from '@/lib/finance-preview-write';
 import {assertSameOrigin,readJSON,securityError} from '@/lib/request-security';
 import {consumeRateLimit} from '@/lib/rate-limit';
 import {calculationContext} from '@/lib/calculation-context';
@@ -55,6 +56,7 @@ export async function GET(r:Request){
  }catch(e){const limited=securityError(e);if(limited)return limited;console.error('Finance read failed');return json({error:'Não foi possível carregar os dados. Tente novamente.'},503);}
 }
 export async function POST(r:Request){
+ if(process.env.VERCEL)return financePreviewWrite(r);
  try{assertSameOrigin(r);const user=await getChatGPTUser();if(!user)return json({error:'Acesso restrito.'},401);const db=database();if(!await isAdministrator(db,user))return json({error:'Somente o administrador pode alterar os dados.'},403);await consumeRateLimit(db,'finance-write',user.userId,120,60000);const body:any=await readJSON(r);const {action,month}=body;if(action==='export')await consumeRateLimit(db,'export',user.userId,10,60000);if(!monthOK(month))return json({error:'Informe uma competência válida.'},400);
  const audit=(action:string,detail:any)=>db.prepare('INSERT INTO audit(id,month,action,actor,created,detail) VALUES(?,?,?,?,?,?)').bind(crypto.randomUUID(),month,action,user.email,new Date().toISOString(),JSON.stringify(detail));
  const extra=await extraActions(db,body,user.email);if(extra)return json(extra);
