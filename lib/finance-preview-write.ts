@@ -1,4 +1,11 @@
 import 'server-only';
+import {saveTermination} from './supabase-termination';
+import {salaryActions,saveSalary} from './supabase-salary';
+import {saveEventPlan} from './supabase-event-plan';
+import {saveChildcare} from './supabase-childcare';
+import {saveHealthBase} from './supabase-health-base';
+import {saveInclusion} from './supabase-inclusion';
+import {saveDsr} from './supabase-dsr';
 import {saveEmployeeEdit} from './supabase-employee-edit';
 import {recordActions,saveRecordAction} from './supabase-record-actions';
 import {assertSameOrigin,readJSON,securityError} from './request-security';
@@ -33,6 +40,26 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
    const saved=action==='record'?await saveEditedRecord(body.month,body.employee as string,body.data,body.revision as number,user.email):await saveCalculatedPeriod(body.month,action,user.email);
    if(!saved)return reply({error:'Competência ou dados alterados. Atualize antes de calcular novamente.'},409);
    return reply({ok:true});
+  }
+  if(action==='include'||action==='dsr_setting'||action==='health_base'){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await (action==='include'?saveInclusion(body,user.email):action==='health_base'?saveHealthBase(body,user.email):saveDsr(body,user.email)));
+  }
+  if(action==='childcare_child'||action==='childcare_sync'){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await saveChildcare(body,user.email));
+  }
+  if(action==='event_plan'){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await saveEventPlan(body,user.email));
+  }
+  if(salaryActions.has(action)){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await saveSalary(body,user.email));
+  }
+  if(action==='termination_preview'||action==='termination_save'){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await saveTermination(body,user.email));
   }
   if(recordActions.has(action)){
    if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);

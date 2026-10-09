@@ -169,97 +169,97 @@
   },
   {
     "action": "include",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "include_finance_employee",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "dsr_setting",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_dsr",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "health_base",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_health_base",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "childcare_child",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_childcare",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "childcare_sync",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_childcare",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "event_plan",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "register_finance_event_plan",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "salary_preview",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "finance_calculation_snapshot",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "salary_adjust",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_salary",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "salary_rows_preview",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "finance_calculation_snapshot",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "salary_rows_apply",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_salary",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "termination_preview",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "finance_termination_snapshot",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
   {
     "action": "termination_save",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_termination",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   }

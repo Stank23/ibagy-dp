@@ -1,0 +1,32 @@
+begin;
+do $$
+declare token text;items jsonb;result jsonb;
+begin
+ assert not exists(select 1 from public.periods where month in('2000-01','2000-02','2000-03')),'Synthetic periods exist';
+ insert into public.periods(month,status,commission_status) values('2000-01','open','open'),('2000-02','open','open'),('2000-03','closed','closed');
+ insert into public.employees(id,registration,active) values('test-health-childcare','TEST-HEALTH-CHILDCARE',1);
+ insert into public.versions(employee,month,data) values('test-health-childcare','2000-01','{"D":"1999-01-01","gender":"Feminino","C":"Pessoa fictícia"}');
+ insert into public.normative_wages(month,amount) values('2000-01',200000);
+ insert into public.records(month,employee,data,revision) values('2000-01','test-health-childcare','{"gender":"Feminino","K":"1234.56"}',77),('2000-02','test-health-childcare','{"gender":"Feminino","K":"1234.56"}',1),('2000-03','test-health-childcare','{"gender":"Feminino","K":"1234.56"}',88);
+ token:=public.finance_calculation_snapshot('2000-02')->>'token';
+ items:='[{"employee":"test-health-childcare","revision":99,"data":"{\"gender\":\"Feminino\",\"K\":\"1234.56\"}"}]';
+ assert not public.save_finance_health_base('2000-02','test-health-childcare','test-health-child',token,'{"gender":"Feminino","D":"1999-01-01"}',items),'Stale health accepted';
+ assert not exists(select 1 from public.versions where employee='test-health-childcare' and month='2000-02'),'Partial base saved';
+ items:=jsonb_set(items,'{0,revision}','1');
+ assert public.save_finance_health_base('2000-02','test-health-childcare','test-health-child',token,'{"gender":"Feminino","D":"1999-01-01"}',items),'Health save failed';
+ result:=public.save_finance_childcare('2000-02','test-health-child','childcare_child','{"id":"test-childcare-child-001","employee":"test-health-childcare","name":"Filho fictício","birthDate":"1998-02-28"}');
+ assert result->>'ok'='true','Child registration failed';
+ assert (select last_credit='2005-02' and revision=1 from public.childcare_children where id='test-childcare-child-001'),'Eligibility wrong';
+ assert (select data::jsonb->>'AG'='400.00' and revision=3 and data::jsonb->>'K'='1234.56' from public.records where month='2000-02'),'Childcare calculation wrong';
+ result:=public.save_finance_childcare('2000-02','test-health-child','childcare_child','{"id":"test-childcare-child-001","employee":"test-health-childcare","name":"Nome editado","birthDate":"1998-02-28","revision":99}');
+ assert result->>'ok'='false','Stale child accepted';
+ result:=public.save_finance_childcare('2000-02','test-health-child','childcare_sync',null);
+ assert result->>'ok'='true','Sync failed';
+ assert public.refresh_finance_childcare('2000-02','test-health-childcare')=0,'Repeat sync not idempotent';
+ assert (select revision=77 and not data::jsonb ? 'AG' from public.records where month='2000-01'),'Earlier open month changed';
+ assert (select revision=88 and not data::jsonb ? 'AG' from public.records where month='2000-03'),'Closed month changed';
+ assert not has_function_privilege('anon','public.save_finance_health_base(text,text,text,text,text,jsonb)','execute');
+ assert not has_function_privilege('authenticated','public.save_finance_childcare(text,text,text,jsonb)','execute');
+end $$;
+select 'PASS: health atomic base/record, childcare eligibility/calculation, stale revision, idempotent sync, earlier and closed history, restricted access' as result;
+rollback;

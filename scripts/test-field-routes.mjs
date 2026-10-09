@@ -18,12 +18,14 @@ globalThis.__fieldUser=()=>({userId:'synthetic-admin',email:'admin@example.inval
 globalThis.__fieldRequest=async(path,options={})=>{
  calls.push({path,options});
  if(path.includes('/rpc/')){
+  if(path.endsWith('/finance_termination_snapshot'))return {snapshot:{...structuredClone(tables),period:tables.periods.find(p=>p.month===options.body.p_month)||null,records:tables.records.filter(r=>r.month===options.body.p_month),remaining_installments:[],remaining_event_plans:[],future_records:[]},token:'a'.repeat(32)};
   if(path.endsWith('/finance_employee_edit_snapshot'))return {snapshot:{...structuredClone(tables),affected_records:tables.records.filter(r=>r.employee===options.body.p_employee&&r.month>=options.body.p_month&&tables.periods.some(p=>p.month===r.month&&p.status==='open')),future_versions:[],future_normative_wages:[]},token:'a'.repeat(32)};
   if(path.endsWith('/save_finance_employee_edit')){for(const record of options.body.p_records){const old=tables.records.find(r=>r.employee===record.employee&&r.month===record.month);old.data=record.data;old.revision++;}return true;}
   if(path.endsWith('/finance_calculation_snapshot')||path.endsWith('/finance_record_action_snapshot'))return {snapshot:{...structuredClone(tables),period:tables.periods.find(p=>p.month===options.body.p_month)||null,records:tables.records.filter(r=>r.month===options.body.p_month)},token:'a'.repeat(32)};
   if(path.endsWith('/save_calculated_finance_period')||path.endsWith('/save_finance_record_action')){
    for(const record of options.body.p_records){const old=tables.records.find(r=>r.employee===record.employee&&r.month===options.body.p_month);if(old){old.data=record.data;old.revision++;}}
   }
+  if(path.endsWith('/save_finance_childcare'))return {ok:true,id:options.body.p_child?.id,changed:0};
   if(path.endsWith('/save_job_function'))return options.body.p_name;
   return true;
  }
@@ -76,11 +78,20 @@ const scenarios=[
  ['health_sync',{action:'health_sync',employee:f.employee,revision:1},200,'save_finance_record_action'],
  ['health_copart',{action:'health_copart',employee:f.employee,revision:1,amounts:f.raw.healthCopart},200,'save_finance_record_action'],
  ...['health_copart_bulk','health_monthly_bulk'].map(action=>[action,{action,plan:'unimed',rows:[{employee:f.employee,revision:1,amounts:{'unimed-titular':'10.00'}}]},200,'save_finance_record_action']),
- ...['include','dsr_setting','health_base','childcare_child','childcare_sync','event_plan','salary_preview','salary_adjust','salary_rows_preview','salary_rows_apply','termination_preview','termination_save'].map(action=>[action,{action,employee:f.employee},503,null])
+ ['include',{action:'include',employee:f.employee},200,'include_finance_employee'],
+ ['dsr_setting',{action:'dsr_setting',useful:25,rest:4,revision:0},200,'save_finance_dsr'],
+ ['health_base',{action:'health_base',employee:f.employee,source:f.snapshot.versions.find(v=>v.employee===f.employee).data,members:JSON.parse(f.snapshot.versions.find(v=>v.employee===f.employee).data).healthMembers},200,'save_finance_health_base'],
+ ['childcare_child',{action:'childcare_child',employee:f.employee,id:'test-childcare-route-001',name:'Filho fictício',birthDate:'1998-01-01'},200,'save_finance_childcare'],
+ ['childcare_sync',{action:'childcare_sync'},200,'save_finance_childcare'],
+ ['event_plan',{action:'event_plan',employee:f.employee,id:'test-event-route-00001',event:'CK',amount:'10.00',count:3,start:f.month,end:'2000-04'},200,'register_finance_event_plan'],
+ ...['salary_preview','salary_adjust','salary_rows_preview','salary_rows_apply'].map(action=>[action,{action,percent:'5.00',edits:[{employee:f.employee,mode:'amount',value:'3000.00'}],applyOpen:true},200,action.endsWith('preview')?'finance_calculation_snapshot':'save_finance_salary']),
+ ...['termination_preview','termination_save'].map(action=>[action,{action,employee:f.employee,revision:1,date:'2000-02-15',foodAlreadyPaid:true},200,action.endsWith('preview')?'finance_termination_snapshot':'save_finance_termination'])
 ];
 const actions=[];
 for(const [name,body,status,rpc] of scenarios){
  reset();calls=[];
+ if(name==='dsr_setting'){const d=JSON.parse(tables.records[0].data);d.U='1000.00';tables.records[0].data=JSON.stringify(d);}
+ if(name==='salary_adjust'||name==='salary_rows_apply'){const p=await write({month:f.month,...body,action:name==='salary_adjust'?'salary_preview':'salary_rows_preview'});assert.equal(p.status,200);body.token=(await p.json()).token;}
  const response=await write({month:f.month,...body});
  assert.equal(response.status,status,name+' expected integration status');
  if(rpc)assert.ok(calls.some(c=>c.path.endsWith('/'+rpc)),name+' is linked to the expected RPC');
@@ -90,5 +101,8 @@ for(const [name,body,status,rpc] of scenarios){
 for(const amount of ['','0.00','-1.00','NaN','2.001']){
  reset();calls=[];assert.equal((await write({month:f.month,action:'normative_wage',amount})).status,400);assert.equal(calls.length,0);
 }
+reset();tables.records[0].data=JSON.stringify({...f.baseline,_termination:true,_excluded:true,_terminationSettlement:{loanRemaining:'102.80'}});
+const terminationRead=await financePreviewRead(new Request('https://mock.invalid/api/finance?month='+f.month+'&terminationMessage='+f.employee));assert.equal(terminationRead.status,200);assert.equal((await terminationRead.json()).summary.loanRemaining,'102.80');
+tables.records[0].data=JSON.stringify({...f.baseline,_terminationCarry:true});assert.equal((await financePreviewRead(new Request('https://mock.invalid/api/finance?month='+f.month+'&terminationMessage='+f.employee))).status,400);
 await writeFile(resolve(dirname(path),'action-coverage.json'),JSON.stringify(actions,null,2)+'\n');
 console.log('PASS: '+checked+' field scenarios POST → real finance handlers → mocked transport → GET/reload/history; '+actions.length+' finance action statuses checked. '+actions.filter(a=>a.status==='NOT_INTEGRATED').length+' operations remain explicitly blocked. Browser and real REST transport not covered.');
