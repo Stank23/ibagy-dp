@@ -1,0 +1,1 @@
+export function jobFunctionName(input:unknown){if(typeof input!=='string')throw Error('Informe o nome da função.');const name=input.normalize('NFC').replace(/\s+/gu,' ').trim();if(!name||name.length>180||/[\u0000-\u001f\u007f]/u.test(name))throw Error('Informe uma função com até 180 caracteres.');return {name,key:name.toLocaleLowerCase('pt-BR')};}

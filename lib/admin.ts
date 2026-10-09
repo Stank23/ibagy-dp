@@ -1,0 +1,1 @@
+export async function isAdministrator(db:any,user:{userId:string,email:string}|null){if(!user)return false;return !!await db.prepare("SELECT id FROM app_users WHERE id=? AND role='admin' AND active=1").bind(user.userId).first();}

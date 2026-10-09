@@ -1,0 +1,1 @@
+export function accountEmail(input:unknown){if(typeof input!=='string')throw Error('Informe um e-mail válido.');const email=input.trim().toLowerCase();if(email.length>254||!/^\S+@[^\s@]+\.[^\s@]+$/.test(email)||email.split('@').length!==2)throw Error('Informe um e-mail válido.');return email;}

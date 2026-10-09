@@ -1,0 +1,581 @@
+{
+  "fields": [
+    {
+      "key": "A",
+      "label": "Mês"
+    },
+    {
+      "key": "B",
+      "label": "Matrícula"
+    },
+    {
+      "key": "C",
+      "label": "Nome"
+    },
+    {
+      "key": "D",
+      "label": "Admissão"
+    },
+    {
+      "key": "E",
+      "label": "CPF"
+    },
+    {
+      "key": "F",
+      "label": "Data Nascimento"
+    },
+    {
+      "key": "G",
+      "label": "Situação"
+    },
+    {
+      "key": "H",
+      "label": "Loja"
+    },
+    {
+      "key": "I",
+      "label": "Rateio"
+    },
+    {
+      "key": "J",
+      "label": "Setor"
+    },
+    {
+      "key": "K",
+      "label": "Salário Bruto"
+    },
+    {
+      "key": "L",
+      "label": "Dissídio (Coluna para valor antigo)"
+    },
+    {
+      "key": "M",
+      "label": "Quinquenio (78)"
+    },
+    {
+      "key": "N",
+      "label": "Caixa (66) Periculosidade (64) Insalubridade (69) Tele Trabalho (3637)"
+    },
+    {
+      "key": "O",
+      "label": "Total Salário"
+    },
+    {
+      "key": "P",
+      "label": "Comissão"
+    },
+    {
+      "key": "Q",
+      "label": "Adto (3)"
+    },
+    {
+      "key": "R",
+      "label": "Líquido"
+    },
+    {
+      "key": "S",
+      "label": "IRRF"
+    },
+    {
+      "key": "T",
+      "label": "DSR (91)"
+    },
+    {
+      "key": "U",
+      "label": "Comissão (90"
+    },
+    {
+      "key": "V",
+      "label": "Comissão Atingimento de Metas (2107)"
+    },
+    {
+      "key": "W",
+      "label": "Indicação Captador (Pgto dia 01 com a folha)"
+    },
+    {
+      "key": "X",
+      "label": "Indicação Captador DSR (91)"
+    },
+    {
+      "key": "Y",
+      "label": "Comissão (90)  2"
+    },
+    {
+      "key": "Z",
+      "label": "Gratificação Indicação (2235)"
+    },
+    {
+      "key": "AA",
+      "label": "Gratificação Avaliação (2304)"
+    },
+    {
+      "key": "AB",
+      "label": "Farmácia Sesi"
+    },
+    {
+      "key": "AC",
+      "label": "Farmácia Zazá"
+    },
+    {
+      "key": "AD",
+      "label": "Farmácia São João"
+    },
+    {
+      "key": "AE",
+      "label": "Farmácia (806)"
+    },
+    {
+      "key": "AF",
+      "label": "HE 65%     (39)"
+    },
+    {
+      "key": "AG",
+      "label": "Auxílio Creche (3614)"
+    },
+    {
+      "key": "AH",
+      "label": "Empréstimo Itaú (2924)"
+    },
+    {
+      "key": "AI",
+      "label": "Empréstimo Serefi (1865)"
+    },
+    {
+      "key": "AJ",
+      "label": "Empréstimo Governo"
+    },
+    {
+      "key": "AK",
+      "label": "Total Empréstimos"
+    },
+    {
+      "key": "AL",
+      "label": "SEREFI (2373) 2% Salário Mínimo"
+    },
+    {
+      "key": "AM",
+      "label": "Multa (1071)"
+    },
+    {
+      "key": "AN",
+      "label": "VR/VA (1598)"
+    },
+    {
+      "key": "AO",
+      "label": "Vale Refeição"
+    },
+    {
+      "key": "AP",
+      "label": "Vale Alimentação  (1779)"
+    },
+    {
+      "key": "AQ",
+      "label": "Desconto Ticket (1483)"
+    },
+    {
+      "key": "AR",
+      "label": "Vale Transporte"
+    },
+    {
+      "key": "AS",
+      "label": "UNIMED INTEGRAL"
+    },
+    {
+      "key": "AT",
+      "label": "Unimed Empresa (344)"
+    },
+    {
+      "key": "AU",
+      "label": "Unimed Mensal Titular"
+    },
+    {
+      "key": "AV",
+      "label": "Serviço"
+    },
+    {
+      "key": "AW",
+      "label": "UNIMED TITULAR"
+    },
+    {
+      "key": "AX",
+      "label": "Dependente 1"
+    },
+    {
+      "key": "AY",
+      "label": "Unimed Mensal 1"
+    },
+    {
+      "key": "AZ",
+      "label": "Unimed Serviço 1"
+    },
+    {
+      "key": "BA",
+      "label": "UNIMED DEPENDENTE 1"
+    },
+    {
+      "key": "BB",
+      "label": "Dependente 2"
+    },
+    {
+      "key": "BC",
+      "label": "Unimed Mensal 2"
+    },
+    {
+      "key": "BD",
+      "label": "Unimed Serviço 2"
+    },
+    {
+      "key": "BE",
+      "label": "UNIMED DEPENDENTE 2"
+    },
+    {
+      "key": "BF",
+      "label": "Dependente 3"
+    },
+    {
+      "key": "BG",
+      "label": "Unimed Mensal 3"
+    },
+    {
+      "key": "BH",
+      "label": "Unimed Serviço 3"
+    },
+    {
+      "key": "BI",
+      "label": "UNIMED DEPENDENTE 3"
+    },
+    {
+      "key": "BJ",
+      "label": "DEPENDENTE 4"
+    },
+    {
+      "key": "BK",
+      "label": "Unimed Mensal 4"
+    },
+    {
+      "key": "BL",
+      "label": "Unimed Serviço 4"
+    },
+    {
+      "key": "BM",
+      "label": "UNIMED DEPENTE 4"
+    },
+    {
+      "key": "BN",
+      "label": "Uniodonto INTEGRAL"
+    },
+    {
+      "key": "BO",
+      "label": "Uniodonto Empresa (344)"
+    },
+    {
+      "key": "BP",
+      "label": "Uniodonto Mensal Titular"
+    },
+    {
+      "key": "BQ",
+      "label": "Uniodonto Serviço Titular"
+    },
+    {
+      "key": "BR",
+      "label": "UNIODONTO TITULAR (1096)"
+    },
+    {
+      "key": "BS",
+      "label": "Uniodonto Dep. 1"
+    },
+    {
+      "key": "BT",
+      "label": "Uniodonto Mensal 1"
+    },
+    {
+      "key": "BU",
+      "label": "Uniodonto Serviço 1"
+    },
+    {
+      "key": "BV",
+      "label": "UNIODONTO DEPENDENTE 1"
+    },
+    {
+      "key": "BW",
+      "label": "Uniodonto Dep. 2"
+    },
+    {
+      "key": "BX",
+      "label": "Uniodonto Mensal 2"
+    },
+    {
+      "key": "BY",
+      "label": "Uniodonto Serviço 2"
+    },
+    {
+      "key": "BZ",
+      "label": "UNIODONTO DEPENDENTE 2"
+    },
+    {
+      "key": "CA",
+      "label": "Uniodonto Dep. 3"
+    },
+    {
+      "key": "CB",
+      "label": "Uniodonto Mensal 3"
+    },
+    {
+      "key": "CC",
+      "label": "Uniodonto Serviço 3"
+    },
+    {
+      "key": "CD",
+      "label": "UNIODONTO DEPENDENTE 3"
+    },
+    {
+      "key": "CE",
+      "label": "Uniodonto Dep.4"
+    },
+    {
+      "key": "CF",
+      "label": "Uniodonto Mensal 4"
+    },
+    {
+      "key": "CG",
+      "label": "Uniodonto Serviço 4"
+    },
+    {
+      "key": "CH",
+      "label": "UNIODONTO DEPENDENTE 4"
+    },
+    {
+      "key": "CI",
+      "label": "Total Mensalidade (1033)"
+    },
+    {
+      "key": "CJ",
+      "label": "Total Coparticipação (1037)"
+    },
+    {
+      "key": "CK",
+      "label": "Cursos (2233)"
+    },
+    {
+      "key": "CL",
+      "label": "Canecas (1689)"
+    },
+    {
+      "key": "CM",
+      "label": "Uniforme  (892)"
+    },
+    {
+      "key": "CN",
+      "label": "Observações"
+    },
+    {
+      "key": "CO",
+      "label": "Unimed total"
+    },
+    {
+      "key": "CP",
+      "label": "Uniodonto total"
+    },
+    {
+      "key": "CQ",
+      "label": "FGTS"
+    },
+    {
+      "key": "CR",
+      "label": "INSS 11%"
+    },
+    {
+      "key": "CS",
+      "label": "Salário, comissões e gratificações"
+    },
+    {
+      "key": "CT",
+      "label": "Encargos"
+    },
+    {
+      "key": "CU",
+      "label": "Função"
+    },
+    {
+      "key": "CV",
+      "label": "VT"
+    },
+    {
+      "key": "CW",
+      "label": "VR"
+    },
+    {
+      "key": "CX",
+      "label": "Plano de saúde"
+    },
+    {
+      "key": "CY",
+      "label": "Total (VT, VR, Saude)"
+    },
+    {
+      "key": "CZ",
+      "label": "Provisão 13º"
+    },
+    {
+      "key": "DA",
+      "label": "Provisão Férias"
+    },
+    {
+      "key": "DB",
+      "label": "Provisão 1/3 férias"
+    },
+    {
+      "key": "DC",
+      "label": "Provisão FGTS 13º e férias"
+    },
+    {
+      "key": "DD",
+      "label": "Provisão INSS 13º e férias"
+    },
+    {
+      "key": "DE",
+      "label": "Total Provisões 13º e férias"
+    },
+    {
+      "key": "DF",
+      "label": "Custo total empresa"
+    },
+    {
+      "key": "DG",
+      "label": "INSS 11%"
+    },
+    {
+      "key": "DH",
+      "label": "Média Salário Liquido"
+    },
+    {
+      "key": "DI",
+      "label": "Ano"
+    },
+    {
+      "key": "DJ",
+      "label": "Comissão Férias"
+    },
+    {
+      "key": "pensionJudicial",
+      "label": "Pensão Judicial"
+    },
+    {
+      "key": "faltas1027",
+      "label": "Falta (1027)"
+    },
+    {
+      "key": "gratificacaoHorasNormais",
+      "label": "Gratificação Horas Normais"
+    },
+    {
+      "key": "gender",
+      "label": "Gênero"
+    }
+  ],
+  "payrollLabels": [
+    "COD. Funcionário",
+    "FILIAL",
+    "NOME FUNCIONÁRIO",
+    "Não adicionar valores nesta coluna",
+    "HE 65%",
+    "Comissão",
+    "Comissão Atingimento Metas",
+    "DSR Comissão",
+    "Grat Indicação",
+    "Grat Avaliação",
+    "Farmácia",
+    "Emprestimo",
+    "Emprestimo Serefi",
+    "Serefi",
+    "VR/VA",
+    "VR/VA",
+    "Creche      ( até 7 anos)",
+    "Multa de Transtio",
+    "Desc Cursos",
+    "Desc Caneca",
+    "Desc Uniforme"
+  ],
+  "codes": [
+    "",
+    "",
+    "",
+    "",
+    39.0,
+    90.0,
+    2107.0,
+    91.0,
+    2235.0,
+    2304.0,
+    806.0,
+    2924.0,
+    1865.0,
+    2373.0,
+    1598.0,
+    1779.0,
+    3614.0,
+    1071.0,
+    2233.0,
+    1689.0,
+    892.0
+  ],
+  "types": [
+    "",
+    "",
+    "Identifique: 1 - Quantidade  2 - Valor -->",
+    "",
+    1.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0
+  ],
+  "healthLabels": [
+    "Empresa",
+    "Matrícula",
+    "Nome",
+    "Unimed Empresa",
+    "Unimed Mensal Titular",
+    "Unimed Serviço Titular",
+    "Unimed Dependente 1",
+    "Unimed Mensal 1",
+    "Unimed Serviço 1",
+    "Unimed Dependente 2",
+    "Unimed Mensal 2",
+    "Unimed Serviço 2",
+    "Unimed Dependente 3",
+    "Unimed Mensal 3",
+    "Unimed Serviço 3",
+    "Unimed Dependente 4",
+    "Unimed Mensal 4",
+    "Unimed Serviço 4",
+    "Uniodonto Empresa",
+    "Uniodonto Mensal Titular",
+    "Uniodonto Serviço Titular",
+    "Uniodonto Dep. 1",
+    "Uniodonto Mensal 1",
+    "Uniodonto Serviço 1",
+    "Uniodonto Dep. 2",
+    "Uniodonto Mensal 2",
+    "Uniodonto Serviço 2",
+    "Uniodonto Dep. 3",
+    "Uniodonto Mensal 3",
+    "Uniodonto Serviço 3",
+    "Uniodonto Dep.4",
+    "Uniodonto Mensal 4",
+    "Uniodonto Serviço 4",
+    "Observações"
+  ]
+}
