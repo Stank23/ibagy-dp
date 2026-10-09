@@ -52,7 +52,7 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
    if(!data||typeof data!=='object'||Array.isArray(data))return reply({error:'Cadastro inválido.'},400);
    const d={...(data as Row)};
    if(typeof d.E!=='string'||!validCPF(d.E))return reply({error:'CPF inválido. Confira os dígitos antes de cadastrar.'},400);
-   if(typeof d.B!=='string'||!d.B.trim()||typeof d.C!=='string'||!d.C.trim()||typeof d.H!=='string'||!d.H.trim()||typeof d.D!=='string'||!/^20\d{2}-(0[1-9]|1[0-2])-[0-3]\d$/.test(d.D))return reply({error:'Preencha matrícula, nome, data de admissão e filial.'},400);
+   if(typeof d.B!=='string'||!d.B.trim()||typeof d.C!=='string'||!d.C.trim()||typeof d.H!=='string'||!d.H.trim()||typeof d.D!=='string'||!/^\d{4}-(0[1-9]|1[0-2])-[0-3]\d$/.test(d.D))return reply({error:'Preencha matrícula, nome, data de admissão e filial.'},400);
    if(d.B.length>80||d.C.length>180||d.H.length>120)return reply({error:'Cadastro excede o tamanho permitido.'},400);
    d.E=formatCPF(d.E);d.AG='0.00';d.receivesVA=d.receivesVA!==false;
    const id=crypto.randomUUID();
@@ -65,6 +65,13 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
    try{functionName=jobFunctionName(body.name);}catch{return reply({error:'Informe uma função válida com até 180 caracteres.'},400);}
    const name=await supabaseAdminRequest<string>('/rest/v1/rpc/save_job_function',{method:'POST',body:{p_name:functionName.name,p_key:functionName.key,p_actor:user.email,p_month:body.month}});
    return reply({ok:true,name});
+  }
+  if(action==='normative_wage'){
+   const amount=String(body.amount??'');
+   if(!/^\d{1,8}(\.\d{1,2})?$/.test(amount)||cents(amount)<=0)return reply({error:'Informe um salário normativo positivo.'},400);
+   const saved=await supabaseAdminRequest<boolean>('/rest/v1/rpc/save_normative_wage',{method:'POST',body:{p_month:body.month,p_amount:amount,p_actor:user.email}});
+   if(!saved)return reply({error:'Não foi possível salvar o salário normativo.'},409);
+   return reply({ok:true});
   }
   if(['minimum_wage','allowance','unimed_rates','uniodonto_fixed_rate'].includes(action)){
    const revision=Number(body.revision??0);
