@@ -1,0 +1,11 @@
+import {isAdministrator} from '@/lib/admin';
+import {getChatGPTUser} from '@/app/chatgpt-auth';
+import {database,bucket} from '@/lib/store';
+import {assertSameOrigin,readLimitedBody,securityError} from '@/lib/request-security';
+import {consumeRateLimit} from '@/lib/rate-limit';
+export async function POST(r:Request){try{
+ assertSameOrigin(r);const user=await getChatGPTUser();if(!user)return Response.json({error:'Acesso restrito'},{status:401});const db=database();if(!await isAdministrator(db,user))return Response.json({error:'Acesso restrito'},{status:403});await consumeRateLimit(db,'document-upload',user.userId,10,60000);
+ if(!r.headers.get('content-type')?.toLowerCase().startsWith('multipart/form-data;'))return Response.json({error:'Formato de envio inválido.'},{status:415});const bytes=await readLimitedBody(r,16*1024*1024),form=await new Response(bytes as BodyInit,{headers:{'Content-Type':r.headers.get('content-type')!}}).formData(),file=form.get('file'),month=String(form.get('month'));
+ if(!(file instanceof File)||!file.size||file.size>15*1024*1024)return Response.json({error:'Selecione um arquivo de até 15 MB.'},{status:400});const name=file.name.replace(/[\x00-\x1f\x7f"\\/]/g,'_').slice(0,200);if(!/\.(pdf|xls|xlsx|csv|doc|docx|txt|png|jpg|jpeg)$/i.test(name))return Response.json({error:'Formato não permitido. Envie PDF, planilha, documento, texto ou imagem PNG/JPG.'},{status:400});if(!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month)||!await db.prepare('SELECT month FROM periods WHERE month=?').bind(month).first())return Response.json({error:'Competência não encontrada'},{status:400});
+ const id=crypto.randomUUID(),key=`documents/${month}/${id}`;await bucket().put(key,await file.arrayBuffer(),{httpMetadata:{contentType:'application/octet-stream'}});await db.batch([db.prepare('INSERT INTO files(id,month,kind,name,key,created) VALUES(?,?,?,?,?,?)').bind(id,month,'document',name,key,new Date().toISOString()),db.prepare('INSERT INTO audit(id,month,action,actor,created,detail) VALUES(?,?,?,?,?,?)').bind(crypto.randomUUID(),month,'Documento anexado',user.email,new Date().toISOString(),JSON.stringify({file:id}))]);return Response.json({ok:true});
+ }catch(e){const limited=securityError(e);if(limited)return limited;console.error('Document upload failed');return Response.json({error:'Não foi possível anexar o documento.'},{status:503});}}

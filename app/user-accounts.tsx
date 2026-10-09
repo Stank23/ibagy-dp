@@ -1,0 +1,9 @@
+'use client';
+import {useEffect,useState} from 'react';
+export default function UserAccounts(){
+ const [users,setUsers]=useState<any[]>([]),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
+ async function load(){const response=await fetch('/api/auth',{cache:'no-store'});const data:any=await response.json();if(!response.ok)throw Error(data.error);setUsers(data.users);}
+ useEffect(()=>{load().catch(e=>setMessage(e.message));},[]);
+ async function action(body:any){setBusy(true);setMessage('');try{const response=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data:any=await response.json();if(!response.ok)throw Error(data.error);await load();setMessage('Alteração salva.');}catch(e:any){setMessage(e.message);}finally{setBusy(false);}}
+ return <section className="panel account-panel"><h2>Autorizações e permissões</h2><p className="configuration-foot">Os usuários fazem seu cadastro na tela de login. Autorize o acesso e defina a permissão de cada um.</p>{message&&<p role="status">{message}</p>}<div className="table-wrap"><table><thead><tr><th>Usuário</th><th>Nome</th><th>E-mail</th><th>Permissão</th><th>Situação</th><th>Acesso</th></tr></thead><tbody>{users.map(user=><tr key={user.id}><td>{user.username}</td><td>{user.name}</td><td>{user.email||'Não cadastrado'}</td><td><select aria-label={'Permissão de '+user.name} disabled={busy} value={user.role} onChange={e=>action({action:'role',id:user.id,role:e.target.value})}><option value="viewer">Consulta</option><option value="admin">Administrador</option></select></td><td>{user.active===2?'Pendente de aprovação':user.active===1?'Ativo':'Inativo'}</td><td><button disabled={busy} onClick={()=>action({action:'toggle',id:user.id})}>{user.active===2?'Autorizar acesso':user.active===1?'Desativar':'Autorizar acesso'}</button></td></tr>)}</tbody></table></div></section>;
+}

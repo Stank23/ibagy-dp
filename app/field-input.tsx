@@ -1,0 +1,9 @@
+'use client';
+import {JobFunctionInput} from './job-function-input';
+import {HourInput} from './hour-input';
+import {hourKeys} from '@/lib/hours';
+import {Input} from '@/components/ui/input';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
+import {choices} from '@/lib/choices';
+import {formatCPF,validCPF} from '@/lib/cpf';
+export function FieldInput({field,value,onChange,disabled=false,type='text',id,placeholder=''}:any){if(field==='CU')return <JobFunctionInput id={id} value={value} onChange={onChange} disabled={disabled}/>;if(field==='faltas1027')return <Input id={id} type="number" min="0" max="31" step="1" placeholder="Dias" value={value||''} disabled={disabled} onChange={e=>onChange(e.target.value)}/>;if(hourKeys.has(field))return <HourInput id={id} value={value} onChange={onChange} disabled={disabled}/>;if(field==='E')return <><Input id={id} type="text" inputMode="numeric" autoComplete="off" required maxLength={14} placeholder="000.000.000-00" value={formatCPF(value)} disabled={disabled} aria-invalid={Boolean(value)&&!validCPF(value)} aria-describedby={value&&!validCPF(value)?(id||'cpf')+'-error':undefined} onChange={e=>onChange(formatCPF(e.target.value))}/>{value&&!validCPF(value)&&<small id={(id||'cpf')+'-error'} className="cpf-error">CPF inválido. Informe os 11 dígitos de um CPF válido.</small>}</>;const options=choices[field];return options?<Select value={value||''} disabled={disabled} onValueChange={onChange}><SelectTrigger id={id} className="field-select"><SelectValue placeholder="Selecione"/></SelectTrigger><SelectContent>{value&&!options.includes(value)&&<SelectItem value={value}>{value} (cadastrado)</SelectItem>}{options.map(option=><SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent></Select>:<Input id={id} type={type} value={value||''} disabled={disabled} min="0" step="0.01" placeholder={placeholder} onChange={e=>onChange(e.target.value)}/>;}
