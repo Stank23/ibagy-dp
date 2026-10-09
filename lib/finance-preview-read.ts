@@ -4,6 +4,7 @@ import {localUser} from './local-auth';
 
 const monthOK=(m:string)=>/^20\d{2}-(0[1-9]|1[0-2])$/.test(m);
 const q=(value:string)=>encodeURIComponent(value);
+const validEmployeeId=(value:string)=>value.length>0&&value.length<=120&&!/[\u0000-\u001f]/.test(value);
 type Row=Record<string,any>;
 const read=(table:string,params='')=>supabaseAdminRequest<Row[]>('/rest/v1/'+table+'?select=*'+params);
 export async function financePreviewRead(request:Request):Promise<Response>{
@@ -12,10 +13,10 @@ export async function financePreviewRead(request:Request):Promise<Response>{
   const user=await localUser();if(!user)return json({error:'Entre com seu usuário e senha para continuar.'},401);
   const url=new URL(request.url),month=url.searchParams.get('month')||'',employee=url.searchParams.get('employee');
   if(month&&!monthOK(month))return json({error:'Competência inválida.'},400);
+  if(employee&&!validEmployeeId(employee))return json({error:'Identificador de colaborador inválido.'},400);
   if(url.searchParams.has('file')||url.searchParams.has('terminationMessage'))return json({error:'Esta operação ainda não foi migrada para o ambiente de testes.'},503);
   const isAdmin=user.role==='admin';
   if(employee&&url.searchParams.get('historyOnly')==='1'){
-   if(!monthOK(month))return json({error:'Competência inválida.'},400);
    const history=await read('records','&employee=eq.'+q(employee)+'&order=month.desc');
    const periods=await read('periods');
    return json({history:history.map(r=>({...r,status:periods.find(p=>p.month===r.month)?.status??null}))});
