@@ -1,0 +1,20 @@
+import './test-module-hooks.mjs';
+import {registerHooks} from 'node:module';
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+registerHooks({resolve(s,c,next){if(s==='server-only')return {url:'data:text/javascript,export%20default%20null',shortCircuit:true};return next(s,c);}});
+const {employeeEditChanges}=await import('../lib/supabase-employee-edit.ts');
+const f=JSON.parse(await readFile('work/field-tests/all-field-fixtures.json','utf8'));
+const s={...f.snapshot,future_versions:[],future_normative_wages:[],affected_records:[{month:'2000-02',employee:f.employee,revision:1,data:JSON.stringify(f.baseline)},{month:'2000-03',employee:f.employee,revision:2,data:JSON.stringify(f.baseline)}]};
+const body={id:f.employee,month:f.month,data:{...f.raw,C:'Pessoa fictícia editada',K:'4000.00',gender:'Masculino',supportGroup:true},active:false,expectedData:s.versions[0].data,expectedEffective:s.versions[0].month};
+const before=JSON.stringify(s),out=employeeEditChanges(s,body);assert.equal(out.data.K,'4000.00');assert.equal(out.data.C,body.data.C);assert.equal(out.active,0);assert.equal(out.records.length,2);
+assert.equal(out.data.U,undefined,'Monthly commission not copied into recurring base');
+for(const r of out.records){const d=JSON.parse(r.data);assert.equal(d.K,f.baseline.K,'Opened monthly salary preserved');assert.equal(d.gender,'Masculino');assert.equal(d.supportGroup,true);assert.equal(d.AG,'0.00');assert.ok(r.month>=body.month);}
+assert.throws(()=>employeeEditChanges(s,{...body,expectedData:'{}'}),/mudou/);
+assert.throws(()=>employeeEditChanges(s,{...body,data:{...body.data,B:'OTHER'}}),/matrícula/);
+assert.throws(()=>employeeEditChanges(s,{...body,data:{...body.data,E:'111.111.111-11'}}),/CPF/);
+assert.throws(()=>employeeEditChanges({...s,allowances:[]},body),/vale-alimentação/);
+const future=structuredClone(s);future.future_versions=[{employee:f.employee,month:'2000-03',data:JSON.stringify({...f.raw,gender:'Feminino',supportGroup:false})}];
+const preserved=employeeEditChanges(future,body);assert.equal(JSON.parse(preserved.records[1].data).gender,'Feminino','Later effective version retained');
+assert.equal(JSON.stringify(s),before);
+console.log('PASS: employee base edit, recurring-only data, fixed registration/CPF, stale base, active flag, VA config, later versions and monthly salary/history preservation');

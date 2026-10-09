@@ -1,4 +1,5 @@
 import 'server-only';
+import {saveEmployeeEdit} from './supabase-employee-edit';
 import {recordActions,saveRecordAction} from './supabase-record-actions';
 import {assertSameOrigin,readJSON,securityError} from './request-security';
 import {localUser} from './local-auth';
@@ -57,7 +58,7 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
    return reply({ok:true,id});
   }
   if(action==='employee'){
-   if(body.id)return reply({error:'Edição de colaboradores ainda não integrada. Nenhum dado foi alterado.'},503);
+   if(body.id){if(typeof body.id!=='string'||body.id.length>120)return reply({error:'Colaborador inválido.'},400);return reply(await saveEmployeeEdit(body,user.email));}
    const data=body.data;
    if(!data||typeof data!=='object'||Array.isArray(data))return reply({error:'Cadastro inválido.'},400);
    const d={...(data as Row)};

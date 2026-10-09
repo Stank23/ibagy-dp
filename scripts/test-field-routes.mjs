@@ -18,6 +18,8 @@ globalThis.__fieldUser=()=>({userId:'synthetic-admin',email:'admin@example.inval
 globalThis.__fieldRequest=async(path,options={})=>{
  calls.push({path,options});
  if(path.includes('/rpc/')){
+  if(path.endsWith('/finance_employee_edit_snapshot'))return {snapshot:{...structuredClone(tables),affected_records:tables.records.filter(r=>r.employee===options.body.p_employee&&r.month>=options.body.p_month&&tables.periods.some(p=>p.month===r.month&&p.status==='open')),future_versions:[],future_normative_wages:[]},token:'a'.repeat(32)};
+  if(path.endsWith('/save_finance_employee_edit')){for(const record of options.body.p_records){const old=tables.records.find(r=>r.employee===record.employee&&r.month===record.month);old.data=record.data;old.revision++;}return true;}
   if(path.endsWith('/finance_calculation_snapshot')||path.endsWith('/finance_record_action_snapshot'))return {snapshot:{...structuredClone(tables),period:tables.periods.find(p=>p.month===options.body.p_month)||null,records:tables.records.filter(r=>r.month===options.body.p_month)},token:'a'.repeat(32)};
   if(path.endsWith('/save_calculated_finance_period')||path.endsWith('/save_finance_record_action')){
    for(const record of options.body.p_records){const old=tables.records.find(r=>r.employee===record.employee&&r.month===options.body.p_month);if(old){old.data=record.data;old.revision++;}}
@@ -58,7 +60,7 @@ for(const item of f.cases){
 }
 const scenarios=[
  ['employee_create',{action:'employee',data:f.raw,active:true},200,'register_finance_employee'],
- ['employee_edit',{action:'employee',id:f.employee,data:f.raw,active:true},503,null],
+ ['employee_edit',{action:'employee',id:f.employee,data:f.raw,active:true,expectedData:f.snapshot.versions.find(v=>v.employee===f.employee).data,expectedEffective:f.snapshot.versions.find(v=>v.employee===f.employee).month},200,'save_finance_employee_edit'],
  ['period',{action:'period',month:'2000-03'},200,'save_calculated_finance_period'],
  ['recalculate',{action:'recalculate'},200,'save_calculated_finance_period'],
  ['job_function',{action:'job_function',name:'Analista fictício'},200,'save_job_function'],

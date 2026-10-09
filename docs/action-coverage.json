@@ -9,9 +9,9 @@
   },
   {
     "action": "employee_edit",
-    "httpStatus": 503,
-    "expectedRpc": null,
-    "status": "NOT_INTEGRATED",
+    "httpStatus": 200,
+    "expectedRpc": "save_finance_employee_edit",
+    "status": "HTTP_MOCK_PASS",
     "database": "NOT_VERIFIED_BY_THIS_TEST",
     "browser": "BLOCKED_403"
   },
