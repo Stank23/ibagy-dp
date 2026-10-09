@@ -25,7 +25,7 @@ export async function financePreviewRead(request:Request):Promise<Response>{
   const data=Object.fromEntries(tables.map((t,i)=>[t,values[i]])) as Record<string,Row[]>;
   const [records,files,audit,installments]=await Promise.all([
    monthOK(month)?read('records','&month=eq.'+q(month)+'&order=employee.asc'):Promise.resolve([] as Row[]),
-   monthOK(month)?read('files','&month=eq.'+q(month)+'&select=id,month,kind,name,created&order=created.desc'):Promise.resolve([] as Row[]),
+   monthOK(month)?supabaseAdminRequest<Row[]>('/rest/v1/files?select=id,month,kind,name,created&month=eq.'+q(month)+'&order=created.desc'):Promise.resolve([] as Row[]),
    isAdmin&&monthOK(month)?read('audit','&month=eq.'+q(month)+'&order=created.desc&limit=60'):Promise.resolve([] as Row[]),
    read('installments','&order=month.asc,number.asc')
   ]);
