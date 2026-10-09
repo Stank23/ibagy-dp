@@ -13,7 +13,7 @@ if (!url || !key) {
     const endpoint = new URL('/rest/v1/periods?select=month&limit=0', url);
     if (endpoint.protocol !== 'https:') throw new Error('A URL do Supabase deve usar HTTPS.');
     const response = await fetch(endpoint, {
-      headers: { apikey: key, Authorization: `Bearer ${key}`, Accept: 'application/json' },
+      headers: { apikey: key, ...(key.startsWith('sb_secret_') ? {} : {Authorization: `Bearer ${key}`}), Accept: 'application/json' },
       signal: AbortSignal.timeout(10000),
     });
     if (!response.ok) throw new Error(`Supabase respondeu HTTP ${response.status}.`);
