@@ -214,9 +214,10 @@ html,body{min-width:0;background:#f6f6f6}
 .payroll-review-table th{min-width:130px;white-space:normal;vertical-align:top}.payroll-review-table td{white-space:nowrap}.payroll-review-table th:nth-child(3){min-width:240px}
 
 /* Keep each health participant and their monthly amounts on one desktop row. */
-.health-member{grid-template-columns:80px minmax(160px,1.4fr) minmax(110px,1fr) minmax(130px,1fr) minmax(140px,1fr) 80px;gap:12px;align-items:end}
-.health-member-dated{grid-template-columns:80px minmax(160px,1.4fr) 145px minmax(110px,1fr) minmax(130px,1fr) minmax(140px,1fr) 80px}
+.health-member{grid-template-columns:60px minmax(0,1.4fr) repeat(3,minmax(0,1fr)) 80px;gap:12px;align-items:end}
+.health-member-dated{grid-template-columns:60px minmax(0,1.4fr) 125px repeat(3,minmax(0,1fr)) 80px}
 .health-member>label{min-width:0}
+.health-member input{width:100%;min-width:0}
 .health-member>button{order:1}
 .health-member>.status{align-self:center}
 .health-member>.health-pricing-breakdown{display:contents}
