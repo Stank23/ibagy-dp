@@ -9,12 +9,16 @@ const objectPath=(key:string)=>{
  if(!/^(exports|documents)\/20\d{2}-(0[1-9]|1[0-2])\/[a-f0-9-]{36}(\.(xls|xlsx))?$/.test(key))throw Error('Arquivo inválido.');
  return '/storage/v1/object/'+bucket+'/'+key;
 };
+async function isPrivateBucket(response:Response):Promise<boolean>{
+ const value:unknown=await response.json();
+ return !!value&&typeof value==='object'&&'public' in value&&value.public===false;
+}
 async function ensureBucket(){
  const current=await supabaseServerFetch('/storage/v1/bucket/'+bucket);
- if(current.ok){const b=await current.json();if(b.public!==false)throw Error('O armazenamento deve ser privado.');return;}
+ if(current.ok){if(!await isPrivateBucket(current))throw Error('O armazenamento deve ser privado.');return;}
  if(current.status!==404&&current.status!==400)throw Error('Armazenamento indisponível.');
  const created=await supabaseServerFetch('/storage/v1/bucket',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:bucket,name:bucket,public:false,file_size_limit:16*1024*1024})});
- if(!created.ok){const existing=await supabaseServerFetch('/storage/v1/bucket/'+bucket);if(!existing.ok||(await existing.json()).public!==false)throw Error('Armazenamento privado indisponível.');}
+ if(!created.ok){const existing=await supabaseServerFetch('/storage/v1/bucket/'+bucket);if(!existing.ok||!await isPrivateBucket(existing))throw Error('Armazenamento privado indisponível.');}
 }
 async function putFile(month:string,kind:string,name:string,key:string,bytes:BodyInit,contentType:string,actor:string,token:string){
  await ensureBucket();
