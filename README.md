@@ -2,8 +2,6 @@
 
 Sistema de lançamentos mensais, conferência da folha, benefícios, custos/provisões e exportações para contabilidade. Migração da versão 77 de Cloudflare D1/R2 para Next.js na Vercel e PostgreSQL/Storage no Supabase.
 
-**Branch de trabalho:** `migracao-vercel-supabase`. **Não alterar main nem liberar produção:** a validação completa ainda tem pendências documentadas.
-
 ## Documentação
 
 - [PRD](docs/PRD.md): produto, requisitos, critérios de aceite e prioridades.
