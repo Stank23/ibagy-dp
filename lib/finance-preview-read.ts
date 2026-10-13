@@ -30,7 +30,7 @@ export async function financePreviewRead(request:Request):Promise<Response>{
    const periods=await read('periods');
    return json({history:history.map(r=>({...r,status:periods.find(p=>p.month===r.month)?.status??null}))});
   }
-  const tables=['periods','employees','versions','minimum_wages','childcare_children','normative_wages','dsr_settings','unimed_rates','uniodonto_fixed_rates','job_functions','allowances','loans','event_plans'] as const;
+  const tables=['periods','employees','versions','minimum_wages','childcare_children','normative_wages','dsr_settings','dsr_city_settings','unimed_rates','uniodonto_fixed_rates','job_functions','allowances','loans','event_plans'] as const;
   const values=await Promise.all(tables.map(t=>read(t)));
   const data=Object.fromEntries(tables.map((t,i)=>[t,values[i]])) as Record<string,Row[]>;
   const [records,files,audit,installments]=await Promise.all([
@@ -51,6 +51,6 @@ export async function financePreviewRead(request:Request):Promise<Response>{
   const employeeRecords=employee?await read('records','&employee=eq.'+q(employee)+'&order=month.desc'):[];
   const history:Row[]=employeeRecords.map((r:Row):Row=>({...r,status:periods.find((p:Row)=>p.month===r.month)?.status??null}));
   const installmentRows:Row[]=data.installments.map((i:Row)=>({...i,periodStatus:periods.find(p=>p.month===i.month)?.status??null,included:data.records.find(r=>r.month===i.month&&r.employee===i.employee)?.employee??null}));
-  return json({unimedRates:data.unimed_rates,uniodontoRates:data.uniodonto_fixed_rates,jobFunctions:data.job_functions.map(r=>r.name),dsrSettings:data.dsr_settings,userName:user.displayName,isAdmin,canEdit:isAdmin,periods,employees:latest(),bases:monthOK(month)?latest(month):[],records,files,audit,history,childcareChildren:data.childcare_children,normativeWages:data.normative_wages,minimumWages:data.minimum_wages,settings:data.allowances,eventPlans:data.event_plans,loans:data.loans,installments:installmentRows});
+  return json({unimedRates:data.unimed_rates,uniodontoRates:data.uniodonto_fixed_rates,jobFunctions:data.job_functions.map(r=>r.name),dsrSettings:[...data.dsr_settings,...data.dsr_city_settings],userName:user.displayName,isAdmin,canEdit:isAdmin,periods,employees:latest(),bases:monthOK(month)?latest(month):[],records,files,audit,history,childcareChildren:data.childcare_children,normativeWages:data.normative_wages,minimumWages:data.minimum_wages,settings:data.allowances,eventPlans:data.event_plans,loans:data.loans,installments:installmentRows});
  }catch{console.error('Supabase finance preview read failed');return json({error:'Não foi possível carregar os dados. Tente novamente.'},503);}
 }

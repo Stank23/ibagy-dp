@@ -1,12 +1,14 @@
+import {dsrCalendar} from './dsr-city';
 import {commissionAmounts} from './commission';
 
 type CommissionRecord = {employee:string;revision:number;values:Record<string,any>};
-export function commissionChanges(records:CommissionRecord[], amounts:Record<string,string>, nets:Record<string,string>, month:string, useful:number, rest:number, total:number){
+export function commissionChanges(records:CommissionRecord[], amounts:Record<string,string>, nets:Record<string,string>, month:string, useful:number, rest:number, total:number,configured:any[]=[]){
   return records.filter(r=>r.values.P||r.values.commissionType).flatMap(r=>{
     const amount=amounts[r.employee]??r.values.U??'0.00';
     const net=nets[r.employee]??r.values.commissionNet??'';
     if(Number(amount||0)===Number(r.values.U||0)&&String(net)===String(r.values.commissionNet??''))return [];
-    commissionAmounts(amount||'0.00',net,useful,rest,total);
+    const calendar=configured.length?dsrCalendar(configured,month,r.values.H):{useful,rest};
+    commissionAmounts(amount||'0.00',net,calendar.useful,calendar.rest,total);
     return [{action:'commission_value',month,employee:r.employee,revision:r.revision,amount:amount||'0.00',net}];
   });
 }

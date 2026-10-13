@@ -1,3 +1,4 @@
+import {dsrCalendar} from './dsr-city';
 import 'server-only';
 import {supabaseAdminRequest} from './supabase-admin';
 import {commissionDays,commissionAmounts} from './commission';
@@ -19,7 +20,7 @@ export function recordActionUpdates(s:Snapshot,body:any){
  if(action==='commission_value'){
   const row=find(body.employee,body.revision),d=JSON.parse(row.data),v=base(body.employee),b=v?JSON.parse(v.data):{},type=b.P||b.commissionType||d.P||d.commissionType;
   if(!type)throw new CalculationInputError('Marque uma opção de comissão no cadastro.');
-  const days=commissionDays(month),calendar=s.dsr_settings.find(r=>r.month===month);
+  const days=commissionDays(month),calendar=dsrCalendar(s.dsr_settings,month,d.H);
   Object.assign(d,commissionAmounts(body.amount,body.net,calendar?.useful??days.useful,calendar?.rest??days.rest,days.total));d.P=type;
   return [packed(row,applyProvisions(d))];
  }
