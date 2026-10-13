@@ -18,3 +18,15 @@ assert.throws(()=>dsrChanges({...s,period:{status:'closed'}},{month:'2026-11',ci
 const saved=recordActionUpdates(s,{action:'commission_value',month:'2026-11',employee:records[0].employee,revision:1,amount:'100.00',net:'90.00'});assert.equal(JSON.parse(saved[0].data).T,'25.00');
 assert.equal(commissionChanges(records.map(r=>({...r,values:JSON.parse(r.data)})),{'test-city-0':'120'},{},'2026-11',25,5,30,settings).length,1);
 assert.equal(JSON.stringify(s),before);console.log('PASS: agency city mapping, separate calendar selection, legacy fallback, city-only recalculation, commission parity, stale/invalid/closed guards and immutable input.');
+
+const defaults=[...settings,{month:'2026-11',city:'florianopolis',useful:22,rest:8,revision:1}];
+assert.equal(dsrCalendar(defaults,'2026-11','Palhoça').rest,8);
+assert.equal(dsrCalendar(defaults,'2026-11','Matriz').rest,8);
+assert.equal(dsrCalendar(defaults,'2026-11','Biguaçu').rest,6);
+assert.equal(dsrCalendar(defaults,'2026-11','Kobrasol').rest,7);
+const propagated=dsrChanges({...s,dsr_settings:defaults},{month:'2026-11',city:'florianopolis',revision:1,useful:21,rest:9});
+assert.deepEqual(propagated.records.map(r=>r.employee),['test-city-2','test-city-3']);
+assert.equal(JSON.parse(propagated.records[0].data).T,'42.86');
+const onlyDefault=dsrChanges({...s,dsr_settings:[]},{month:'2026-11',city:'florianopolis',revision:0,useful:22,rest:8});
+assert.equal(onlyDefault.records.length,4);
+console.log('PASS: Florianopolis default propagates to unconfigured cities, preserves individual overrides, and overrides legacy general fallback.');
