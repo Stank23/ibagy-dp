@@ -1,22 +1,17 @@
-# Recuperação completa do código
+# Recuperação e continuidade
 
-Origem: última versão publicada do IBAGY · Departamento Pessoal, versão 77.
-Commit original: 5caf1bb7ecf989a79a805bf7200e8efba065194f.
+A referência histórica é a versão 77. A branch main é a base protegida; o trabalho de migração permanece em migracao-vercel-supabase. O backup original não deve ser sobrescrito pela documentação ou pelos artefatos gerados.
 
-Este pacote inclui o código-fonte integral, configurações, package.json, lockfile pnpm, logo, pacote oficial SheetJS e scripts necessários para reconstruir o site. Inclui também os SQLs da estrutura inicial preparada no Supabase, ainda não ligada ao site.
+## Fontes preservadas
 
-A única remoção no código funcional é o INSERT com credenciais do administrador inicial em drizzle/0007_local_login.sql, atendendo ao pedido de não incluir senhas/chaves. Identificadores de campos password_hash/salt e funções de autenticação são código necessário, não credenciais. A documentação README e a regra de ignorar arquivos gerados foram atualizadas para explicar a migração e a importação.
+O motor original em lib/finance-service.ts e seus módulos de regras continuam sendo a referência de cálculo. O caminho Cloudflare/D1/R2 ainda tem chamadas em código, scripts de build e configurações; foi preservado porque a migração não foi declarada concluída. drizzle/ e supabase/ contêm histórico e SQLs distintos, não equivalentes e não descartáveis como arquivos sem uso.
 
-Não inclui dados reais do banco, anexos do R2, contas, sessões, arquivos .env, tokens, chaves privadas, node_modules, arquivos temporários de compilação ou histórico .git. As dependências são instaladas pelo pnpm a partir de package.json/pnpm-lock.yaml.
+## Ambiente e dados
 
-## Primeiro administrador em uma instalação nova
+Segredos pertencem ao ambiente da hospedagem. Nenhum .env, senha padrão ou token deve entrar no Git. Seeds e testes SQL usam dados fictícios. Não aplicar reset ou seeds em produção. Um primeiro administrador deve ser criado por procedimento autorizado da instalação, sem senha compartilhada no código.
 
-Use a tela de cadastro para criar sua conta com uma senha própria. Um administrador do banco deve promover apenas essa conta para role=admin e active=1. Não há senha padrão incluída. Não execute migrações de criação/reset em um banco de produção já existente.
+## Restaurar antes de liberar
 
-## Uso no GitHub
+Backup de banco/anexos, restauração em ambiente isolado e comparação de competências devem ser validados antes de produção. Esta limpeza não migra dados reais, não realiza backup nem comprova restauração. Veja docs/ARCHITECTURE.md e docs/security-validation-2026-10-13.md para as pendências.
 
-Extraia o ZIP, mantenha arquivos ocultos como .gitignore/.openai e envie o conteúdo da pasta ibagy-dp ao repositório privado. A conexão do site e os segredos do servidor precisam ser configurados na hospedagem; enviá-los ao GitHub não é necessário nem seguro.
-
-## Supabase
-
-A migração não está concluída. O código publicado continua usando D1/R2. Os SQLs em supabase/ representam a preparação do banco PostgreSQL. A camada de acesso, transferência dos dados e validação precisam ser concluídas antes de trocar o banco em produção.
+Os inventários/checksums da exportação antiga foram removidos porque não descreviam a branch atual; seu conteúdo permanece no histórico Git. O relatório atual da limpeza registra os caminhos removidos e a razão.
