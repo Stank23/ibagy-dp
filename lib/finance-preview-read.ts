@@ -1,3 +1,4 @@
+import {assertSameSiteRead,securityError} from './request-security';
 import 'server-only';
 import {reserveAuthAttempt} from './supabase-rate-limit';
 import {supabaseAdminRequest} from './supabase-admin';
@@ -11,6 +12,7 @@ const read=(table:string,params='')=>supabaseAdminRequest<Row[]>('/rest/v1/'+tab
 export async function financePreviewRead(request:Request):Promise<Response>{
  const json=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
  try{
+  assertSameSiteRead(request);
   const user=await localUser();if(!user)return json({error:'Entre com seu usuário e senha para continuar.'},401);
   const url=new URL(request.url),month=url.searchParams.get('month')||'',employee=url.searchParams.get('employee');
   if(month&&!monthOK(month))return json({error:'Competência inválida.'},400);
@@ -52,5 +54,5 @@ export async function financePreviewRead(request:Request):Promise<Response>{
   const history:Row[]=employeeRecords.map((r:Row):Row=>({...r,status:periods.find((p:Row)=>p.month===r.month)?.status??null}));
   const installmentRows:Row[]=data.installments.map((i:Row)=>({...i,periodStatus:periods.find(p=>p.month===i.month)?.status??null,included:data.records.find(r=>r.month===i.month&&r.employee===i.employee)?.employee??null}));
   return json({unimedRates:data.unimed_rates,uniodontoRates:data.uniodonto_fixed_rates,jobFunctions:data.job_functions.map(r=>r.name),dsrSettings:[...data.dsr_settings,...data.dsr_city_settings],userName:user.displayName,isAdmin,canEdit:isAdmin,periods,employees:latest(),bases:monthOK(month)?latest(month):[],records,files,audit,history,childcareChildren:data.childcare_children,normativeWages:data.normative_wages,minimumWages:data.minimum_wages,settings:data.allowances,eventPlans:data.event_plans,loans:data.loans,installments:installmentRows});
- }catch{console.error('Supabase finance preview read failed');return json({error:'Não foi possível carregar os dados. Tente novamente.'},503);}
+ }catch(e){const limited=securityError(e);if(limited)return limited;console.error('Supabase finance preview read failed');return json({error:'Não foi possível carregar os dados. Tente novamente.'},503);}
 }

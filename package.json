@@ -21,7 +21,8 @@
     "test:priority-actions": "node scripts/test-all-fields.mjs work/field-tests && node --experimental-transform-types scripts/test-supabase-inclusion-dsr.mjs && node --experimental-transform-types scripts/test-supabase-salary-events.mjs",
     "test:commissions": "node --experimental-transform-types scripts/test-commission-save.mjs",
     "test:health-export": "node --experimental-transform-types scripts/test-health-export.mjs",
-    "test:dsr-city": "node --experimental-transform-types scripts/test-dsr-city.mjs"
+    "test:dsr-city": "node --experimental-transform-types scripts/test-dsr-city.mjs",
+    "test:security": "node --experimental-transform-types scripts/test-security.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

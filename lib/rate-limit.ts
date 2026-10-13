@@ -1,5 +1,5 @@
 import {RequestError} from './request-security';
-export const clientAddress=(request:Request)=>request.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim()||request.headers.get('cf-connecting-ip')||'unknown';
+export const clientAddress=(request:Request)=>process.env.VERCEL?(request.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim()||'unknown'):(request.headers.get('cf-connecting-ip')||'unknown');
 export async function consumeRateLimit(db:any,namespace:string,subject:string,max:number,windowMs:number,now=Date.now()){
  const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(namespace+'|'+subject)),key='rate:'+Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join(''),cutoff=now-windowMs;
  // The conditional UPSERT reserves one attempt atomically, including concurrent requests.
