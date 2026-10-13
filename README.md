@@ -1,41 +1,28 @@
-# [SheetJS](https://sheetjs.com)
+# IBAGY DP · Departamento Pessoal
 
-The SheetJS Community Edition offers battle-tested open-source solutions for
-extracting useful data from almost any complex spreadsheet and generating new
-spreadsheets that will work with legacy and modern software alike.
+Sistema de lançamentos mensais, conferência da folha, benefícios, custos/provisões e exportações para contabilidade. Migração da versão 77 de Cloudflare D1/R2 para Next.js na Vercel e PostgreSQL/Storage no Supabase.
 
-[SheetJS Pro](https://sheetjs.com/pro) offers solutions beyond data processing:
-Edit complex templates with ease; let out your inner Picasso with styling; make
-custom sheets with images/graphs/PivotTables; evaluate formula expressions and
-port calculations to web apps; automate common spreadsheet tasks, and much more!
+**Branch de trabalho:** `migracao-vercel-supabase`. **Não alterar main nem liberar produção:** a validação completa ainda tem pendências documentadas.
 
-## Documentation
+## Documentação
 
-- [API and Usage Documentation](https://docs.sheetjs.com)
+- [PRD](docs/PRD.md): produto, requisitos, critérios de aceite e prioridades.
+- [Design System](docs/DESIGN-SYSTEM.md): identidade, componentes, padrões e acessibilidade.
+- [Architecture](docs/ARCHITECTURE.md): camadas, dados, transações e segurança.
+- [Agent Instructions](AGENTS.md): instruções operacionais para agentes e colaboradores.
+- [Segurança: resultados e pendências](docs/security-validation-2026-10-13.md).
+- [Inventário e limpeza do repositório](docs/repository-cleanup.md).
 
-- [Downloadable Scripts and Modules](https://cdn.sheetjs.com)
+## Executar e validar
 
-## Constellation
+Node >=22.13; pnpm conforme `packageManager` em package.json. `pnpm install --frozen-lockfile` respeita a política de dependências. Configure `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` apenas no servidor/ambiente da hospedagem; nunca no repositório ou em variáveis NEXT_PUBLIC.
 
-- <https://oss.sheetjs.com/notes/>: File Format Notes
+O caminho Vercel usa `npm run build:vercel`. Os comandos dev/build/start genéricos mantêm o ambiente legado Sites/Cloudflare; não são equivalentes ao preview Next.js da Vercel. Consulte Architecture antes de trocar scripts.
 
-- [`ssf`](packages/ssf): Format data using ECMA-376 spreadsheet format codes
+Testes: `test:migration`, `test:fields`, `test:files`, `test:record-actions`, `test:employee-edit`, `test:priority-actions`, `test:commissions`, `test:health-export`, `test:dsr-city` e `test:security` em package.json. Os testes HTTP simulados não substituem o teste real da aplicação.
 
-- [`xlsx-cli`](packages/xlsx-cli): NodeJS command-line tool for processing files
+## Regras de trabalho
 
-- [`cfb`](https://git.sheetjs.com/SheetJS/js-cfb): Container (OLE/ZIP) file
-processing library
+Somente dados fictícios nos testes. Preservar competências anteriores e fechadas. Não modificar cálculos sem conferir a versão 77. Não executar seeds/reset em produção. Nenhuma senha padrão é distribuída. Alterações devem passar por build, testes e revisão antes de qualquer decisão de merge.
 
-- [`codepage`](https://git.sheetjs.com/SheetJS/js-codepage): Legacy text
-encodings for XLS and other legacy spreadsheet formats
-
-- [`dta`](packages/dta): Stata DTA file processor
-
-- [`test_files`](https://github.com/sheetjs/test_files): Test files and various
-plaintext baselines.
-
-## License
-
-Please consult the attached LICENSE file for details.  All rights not explicitly
-granted by the Apache 2.0 License are reserved by the Original Author.
-
+O pacote SheetJS 0.20.3 é mantido em `vendor/xlsx-0.20.3.tgz`; arquivos e avisos da biblioteca estão preservados nesse pacote e no LICENSE existente. O README anterior era material do fornecedor, não documentação do sistema.

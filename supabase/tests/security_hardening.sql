@@ -1,0 +1,33 @@
+begin;
+do $$
+declare i integer;token text;u text:='synthetic-security-admin';v text:='synthetic-security-viewer';audit_before bigint;
+begin
+ assert not exists(select 1 from public.app_users where id in(u,v));
+ assert not exists(select 1 from information_schema.role_table_grants where table_schema='public' and grantee in('anon','authenticated')),'Public table grants remain';
+ assert not exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind in('r','p') and not c.relrowsecurity),'RLS absent';
+ assert not exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and (has_function_privilege('anon',p.oid,'execute') or has_function_privilege('authenticated',p.oid,'execute'))),'Public function exposed';
+ assert not has_table_privilege('service_role','public.audit','UPDATE');assert not has_table_privilege('service_role','public.audit','DELETE');assert not has_table_privilege('service_role','public.audit','TRUNCATE');
+ assert not exists(select 1 from storage.buckets where public),'Public bucket exists';
+ insert into public.app_users(id,username,name,role,salt,password_hash,active) values(u,'synthetic-security-admin','TESTE','admin',repeat('a',32),repeat('a',64),1),(v,'synthetic-security-viewer','TESTE','viewer',repeat('b',32),repeat('b',64),1);
+ for i in 1..6 loop assert public.create_finance_auth_session(u,repeat('a',64),md5(i::text)||md5(i::text),2000+i,1000,null);end loop;
+ assert (select count(*)=5 from public.app_sessions where user_id=u),'Session limit failed';
+ assert not public.create_finance_auth_session(u,repeat('b',64),repeat('c',64),3000,1000,null),'Stale password accepted';
+ select count(*) into audit_before from public.audit where actor='synthetic-security-admin';
+ assert not public.mutate_finance_account(v,'role',jsonb_build_object('id',v,'role','admin')),'Viewer escalation accepted';
+ assert not public.mutate_finance_account(u,'role',jsonb_build_object('id',u,'role','viewer')),'Self demotion accepted';
+ assert not public.mutate_finance_account(u,'toggle',jsonb_build_object('id',u)),'Self disable accepted';
+ assert public.mutate_finance_account(u,'password',jsonb_build_object('id',u,'salt',repeat('c',32),'password_hash',repeat('c',64))),'Password reset failed';
+ assert (select count(*)=0 from public.app_sessions where user_id=u),'Old sessions remain';
+ assert not public.create_finance_auth_session(u,repeat('a',64),repeat('d',64),3000,1000,null),'Password changed after lookup still accepted';
+ assert public.create_finance_auth_session(u,repeat('c',64),repeat('d',64),3000,1000,null),'New password rejected';
+ assert public.create_finance_auth_session(v,repeat('b',64),repeat('e',64),3000,1000,null);
+ assert public.mutate_finance_account(u,'role',jsonb_build_object('id',v,'role','admin'));
+ assert (select count(*)=0 from public.app_sessions where user_id=v),'Role change did not revoke';
+ assert public.mutate_finance_account(u,'toggle',jsonb_build_object('id',v));
+ assert not public.create_finance_auth_session(v,repeat('b',64),repeat('f',64),3000,1000,null),'Inactive login accepted';
+ assert (select count(*)=audit_before+3 from public.audit where actor='synthetic-security-admin'),'Audit missing';
+ assert not exists(select 1 from public.audit where actor='synthetic-security-admin' and detail like '%password_hash%'),'Hash leaked into audit';
+ assert has_table_privilege('service_role','public.records','SELECT');assert has_table_privilege('service_role','public.records','UPDATE');
+end $$;
+select 'PASS: all public grants revoked, RLS/private storage/function privileges, append-only audit, session cap, stale-login rejection, admin/viewer/self restrictions, atomic password/role revocation and audit' as result;
+rollback;

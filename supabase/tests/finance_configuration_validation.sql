@@ -1,0 +1,31 @@
+begin;
+do $$
+declare actor text:='synthetic-configuration-validation';
+begin
+ assert not exists(select 1 from periods where month in ('2000-01','2000-02','2000-03'));
+ insert into periods(month,status,commission_status) values ('2000-01','open','open'),('2000-02','open','open'),('2000-03','closed','closed');
+ insert into employees(id,registration,active) values ('synthetic-config-mother','TEST-CONFIG-MOTHER',1);
+ insert into versions(employee,month,data) values ('synthetic-config-mother','2000-01','{"gender":"Feminino","D":"1999-01-01"}');
+ insert into records(month,employee,data,revision) values ('2000-01','synthetic-config-mother','{"gender":"Feminino","AG":"400.00","K":"3000.00"}',77),('2000-02','synthetic-config-mother','{"gender":"Feminino","AG":"400.00","K":"3000.00","CS":"3000.00","CT":"570.00","CY":"100.00","AP":"900.00","DE":"700.00","DF":"5670.00"}',1),('2000-03','synthetic-config-mother','{"gender":"Feminino","AG":"400.00","K":"3000.00"}',88);
+ insert into childcare_children(id,employee,child_name,birth_date,start,last_credit,revision,created) values ('synthetic-config-child-001','synthetic-config-mother','TESTE FILHO','1998-01-15','1998-01','2005-01',1,now()::text);
+ assert public.save_normative_wage('2000-02','3000.00',actor);
+ assert (select data::jsonb->>'AG'='600.00' and data::jsonb->>'K'='3000.00' and revision=2 from records where month='2000-02' and employee='synthetic-config-mother'),'Normative wage did not refresh eligible childcare';
+ assert (select data::jsonb->>'DF'='5870.00' from records where month='2000-02' and employee='synthetic-config-mother'),'Childcare did not refresh total cost';
+ assert (select revision=77 and data::jsonb->>'AG'='400.00' from records where month='2000-01' and employee='synthetic-config-mother'),'Prior open month changed';
+ assert (select revision=88 and data::jsonb->>'AG'='400.00' from records where month='2000-03' and employee='synthetic-config-mother'),'Closed month changed';
+ assert public.save_normative_wage('2000-02','3000.00',actor);
+ assert (select revision=2 from records where month='2000-02' and employee='synthetic-config-mother'),'Same configuration was not idempotent';
+ assert public.save_finance_configuration('2000-02','minimum_wage','{"amount":"1700.00"}',actor,0);
+ assert public.save_finance_configuration('2000-02','allowance','{"amount":"910.00"}',actor,0);
+ assert public.save_finance_configuration('2000-02','unimed_rates','{"young":"200.00","middle":"300.00","senior":"400.00"}',actor,0);
+ assert public.save_finance_configuration('2000-02','uniodonto_fixed_rate','{"amount":"50.00"}',actor,0);
+ assert not public.save_finance_configuration('2000-02','unimed_rates','{"young":"201.00","middle":"301.00","senior":"401.00"}',actor,0),'Duplicate rate revision accepted';
+ assert (select amount=170000 from minimum_wages where month='2000-02');
+ assert (select amount=91000 from allowances where month='2000-02');
+ assert (select young=20000 and middle=30000 and senior=40000 and revision=1 from unimed_rates where month='2000-02');
+ assert (select amount=5000 and revision=1 from uniodonto_fixed_rates where month='2000-02');
+ assert public.save_job_function('[TESTE] Config Validation','[teste] config validation',actor,'2000-02')='[TESTE] Config Validation';
+ assert (select count(*)=1 from job_functions where key='[teste] config validation');
+end $$;
+select 'PASS: fictional configuration persistence, normative childcare automatic refresh/idempotence, prior/closed months, health revisions and job function' as result;
+rollback;

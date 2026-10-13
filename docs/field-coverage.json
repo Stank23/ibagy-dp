@@ -1,0 +1,1372 @@
+[
+  {
+    "key": "A",
+    "label": "Mês",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "B",
+    "label": "Matrícula",
+    "behavior": "immutable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "C",
+    "label": "Nome",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "D",
+    "label": "Admissão",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "E",
+    "label": "CPF",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "F",
+    "label": "Data Nascimento",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "G",
+    "label": "Situação",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "H",
+    "label": "Loja",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "I",
+    "label": "Rateio",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "J",
+    "label": "Setor",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "K",
+    "label": "Salário Bruto",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "L",
+    "label": "Dissídio (Coluna para valor antigo)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "M",
+    "label": "Quinquenio (78)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "N",
+    "label": "Caixa (66) Periculosidade (64) Insalubridade (69) Tele Trabalho (3637)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "O",
+    "label": "Total Salário",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "P",
+    "label": "Comissão",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "Q",
+    "label": "Adto (3)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "R",
+    "label": "Líquido",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "S",
+    "label": "IRRF",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "T",
+    "label": "DSR (91)",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "U",
+    "label": "Comissão (90",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "V",
+    "label": "Comissão Atingimento de Metas (2107)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "W",
+    "label": "Indicação Captador (Pgto dia 01 com a folha)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "X",
+    "label": "Indicação Captador DSR (91)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "Y",
+    "label": "Comissão (90)  2",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "Z",
+    "label": "Gratificação Indicação (2235)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AA",
+    "label": "Gratificação Avaliação (2304)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AB",
+    "label": "Farmácia Sesi",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AC",
+    "label": "Farmácia Zazá",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AD",
+    "label": "Farmácia São João",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AE",
+    "label": "Farmácia (806)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AF",
+    "label": "HE 65%     (39)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AG",
+    "label": "Auxílio Creche (3614)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AH",
+    "label": "Empréstimo Itaú (2924)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AI",
+    "label": "Empréstimo Serefi (1865)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AJ",
+    "label": "Empréstimo Governo",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AK",
+    "label": "Total Empréstimos",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AL",
+    "label": "SEREFI (2373) 2% Salário Mínimo",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AM",
+    "label": "Multa (1071)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AN",
+    "label": "VR/VA (1598)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AO",
+    "label": "Vale Refeição",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AP",
+    "label": "Vale Alimentação  (1779)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AQ",
+    "label": "Desconto Ticket (1483)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AR",
+    "label": "Vale Transporte",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AS",
+    "label": "UNIMED INTEGRAL",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AT",
+    "label": "Unimed Empresa (344)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AU",
+    "label": "Unimed Mensal Titular",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AV",
+    "label": "Serviço",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AW",
+    "label": "UNIMED TITULAR",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AX",
+    "label": "Dependente 1",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AY",
+    "label": "Unimed Mensal 1",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "AZ",
+    "label": "Unimed Serviço 1",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BA",
+    "label": "UNIMED DEPENDENTE 1",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BB",
+    "label": "Dependente 2",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BC",
+    "label": "Unimed Mensal 2",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BD",
+    "label": "Unimed Serviço 2",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BE",
+    "label": "UNIMED DEPENDENTE 2",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BF",
+    "label": "Dependente 3",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BG",
+    "label": "Unimed Mensal 3",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BH",
+    "label": "Unimed Serviço 3",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BI",
+    "label": "UNIMED DEPENDENTE 3",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BJ",
+    "label": "DEPENDENTE 4",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BK",
+    "label": "Unimed Mensal 4",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BL",
+    "label": "Unimed Serviço 4",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BM",
+    "label": "UNIMED DEPENTE 4",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BN",
+    "label": "Uniodonto INTEGRAL",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BO",
+    "label": "Uniodonto Empresa (344)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BP",
+    "label": "Uniodonto Mensal Titular",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BQ",
+    "label": "Uniodonto Serviço Titular",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BR",
+    "label": "UNIODONTO TITULAR (1096)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BS",
+    "label": "Uniodonto Dep. 1",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BT",
+    "label": "Uniodonto Mensal 1",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BU",
+    "label": "Uniodonto Serviço 1",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BV",
+    "label": "UNIODONTO DEPENDENTE 1",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BW",
+    "label": "Uniodonto Dep. 2",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BX",
+    "label": "Uniodonto Mensal 2",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BY",
+    "label": "Uniodonto Serviço 2",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "BZ",
+    "label": "UNIODONTO DEPENDENTE 2",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CA",
+    "label": "Uniodonto Dep. 3",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CB",
+    "label": "Uniodonto Mensal 3",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CC",
+    "label": "Uniodonto Serviço 3",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CD",
+    "label": "UNIODONTO DEPENDENTE 3",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CE",
+    "label": "Uniodonto Dep.4",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CF",
+    "label": "Uniodonto Mensal 4",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CG",
+    "label": "Uniodonto Serviço 4",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CH",
+    "label": "UNIODONTO DEPENDENTE 4",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CI",
+    "label": "Total Mensalidade (1033)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CJ",
+    "label": "Total Coparticipação (1037)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CK",
+    "label": "Cursos (2233)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CL",
+    "label": "Canecas (1689)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CM",
+    "label": "Uniforme  (892)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CN",
+    "label": "Observações",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CO",
+    "label": "Unimed total",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CP",
+    "label": "Uniodonto total",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CQ",
+    "label": "FGTS",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CR",
+    "label": "INSS 11%",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CS",
+    "label": "Salário, comissões e gratificações",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CT",
+    "label": "Encargos",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CU",
+    "label": "Função",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CV",
+    "label": "VT",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CW",
+    "label": "VR",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CX",
+    "label": "Plano de saúde",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CY",
+    "label": "Total (VT, VR, Saude)",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "CZ",
+    "label": "Provisão 13º",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DA",
+    "label": "Provisão Férias",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DB",
+    "label": "Provisão 1/3 férias",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DC",
+    "label": "Provisão FGTS 13º e férias",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DD",
+    "label": "Provisão INSS 13º e férias",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DE",
+    "label": "Total Provisões 13º e férias",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DF",
+    "label": "Custo total empresa",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DG",
+    "label": "INSS 11%",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DH",
+    "label": "Média Salário Liquido",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DI",
+    "label": "Ano",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "DJ",
+    "label": "Comissão Férias",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "pensionJudicial",
+    "label": "Pensão Judicial",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "faltas1027",
+    "label": "Falta (1027)",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "gratificacaoHorasNormais",
+    "label": "Gratificação Horas Normais",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "gender",
+    "label": "Gênero",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "extraCaixa",
+    "label": "extraCaixa",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "extraPericulosidade",
+    "label": "extraPericulosidade",
+    "behavior": "calculated",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "extraInsalubridade",
+    "label": "extraInsalubridade",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "extraTeletrabalho",
+    "label": "extraTeletrabalho",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "receivesPericulosidade",
+    "label": "receivesPericulosidade",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "supportGroup",
+    "label": "supportGroup",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "receivesVA",
+    "label": "receivesVA",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "chargeSerefi",
+    "label": "chargeSerefi",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "commissionType",
+    "label": "commissionType",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "commissionNet",
+    "label": "commissionNet",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "commissionIR",
+    "label": "commissionIR",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "commissionUseful",
+    "label": "commissionUseful",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "commissionRest",
+    "label": "commissionRest",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "paid20",
+    "label": "paid20",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "paymentDate",
+    "label": "paymentDate",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "paymentStatus",
+    "label": "paymentStatus",
+    "behavior": "editable",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "healthMembers",
+    "label": "healthMembers",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "healthCopart",
+    "label": "healthCopart",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  },
+  {
+    "key": "healthMonthlyAdditions",
+    "label": "healthMonthlyAdditions",
+    "behavior": "preserved",
+    "normalization": "PASS",
+    "calculationOrEdit": "PASS",
+    "databaseRoundTrip": "PASS_RPC_ROLLBACK",
+    "browser": "BLOCKED_403",
+    "httpHandlers": "PASS_MOCK_TRANSPORT"
+  }
+]

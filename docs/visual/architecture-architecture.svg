@@ -1,0 +1,35 @@
+<svg width="495" height="175" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 175" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495" height="175"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-175)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="495" height="175" rx="12" ry="12" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,96%,98%); fill-rule: evenodd;"/>
+			<rect x="15" y="51" width="106" height="95" rx="8" ry="8" style="stroke: rgb(7%,35%,48%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="40.74169921875" y="125" style="font-family: Doc-Bold; font-size: 10px;fill: rgb(7%,35%,48%); stroke:none;" transform="translate(0,250) scale(1,-1)">Navegador</text>
+			<text x="57.35751953125" y="106" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,212) scale(1,-1)">React</text>
+			<text x="31.614550781250003" y="92" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,184) scale(1,-1)">Sem chave privada</text>
+			<path d="M 121,98 L 130,98 Z" style="stroke: rgb(44%,50%,58%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="136 98, 130 101, 130 95" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(44%,50%,58%); fill-rule: evenodd;"/>
+			<rect x="136" y="51" width="106" height="95" rx="8" ry="8" style="stroke: rgb(84%,9%,12%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="161.8515625" y="125" style="font-family: Doc-Bold; font-size: 10px;fill: rgb(84%,9%,12%); stroke:none;" transform="translate(0,250) scale(1,-1)">Proxy / API</text>
+			<text x="175.7698486328125" y="106" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,212) scale(1,-1)">Next.js</text>
+			<text x="177.153857421875" y="92" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,184) scale(1,-1)">Vercel</text>
+			<path d="M 242,98 L 251,98 Z" style="stroke: rgb(44%,50%,58%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="257 98, 251 101, 251 95" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(44%,50%,58%); fill-rule: evenodd;"/>
+			<rect x="257" y="51" width="106" height="95" rx="8" ry="8" style="stroke: rgb(52%,36%,5%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="289.49951171875" y="125" style="font-family: Doc-Bold; font-size: 10px;fill: rgb(52%,36%,5%); stroke:none;" transform="translate(0,250) scale(1,-1)">Serviços</text>
+			<text x="290.178076171875" y="106" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,212) scale(1,-1)">Motor v77</text>
+			<text x="288.36650390625" y="92" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,184) scale(1,-1)">server-only</text>
+			<path d="M 363,98 L 372,98 Z" style="stroke: rgb(44%,50%,58%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="378 98, 372 101, 372 95" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(44%,50%,58%); fill-rule: evenodd;"/>
+			<rect x="378" y="51" width="106" height="95" rx="8" ry="8" style="stroke: rgb(12%,39%,27%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="407.15234375" y="125" style="font-family: Doc-Bold; font-size: 10px;fill: rgb(12%,39%,27%); stroke:none;" transform="translate(0,250) scale(1,-1)">Supabase</text>
+			<text x="405.9034423828125" y="106" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,212) scale(1,-1)">DB + Storage</text>
+			<text x="409.0767333984375" y="92" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,184) scale(1,-1)">Transações</text>
+			<text x="123.88281249999999" y="24" style="font-family: Doc; font-size: 8.5px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,48) scale(1,-1)">Fluxo ilustrativo • nenhuma informação pessoal ou credencial.</text>
+		</g>
+	</g>
+</svg>

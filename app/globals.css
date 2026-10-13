@@ -212,3 +212,21 @@ html,body{min-width:0;background:#f6f6f6}
 .health-pricing-breakdown{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding:12px;background:#f3f3f3;border-radius:8px}.health-pricing-breakdown label{min-width:0}@media(max-width:480px){.health-pricing-breakdown{grid-template-columns:minmax(0,1fr)}}
 
 .payroll-review-table th{min-width:130px;white-space:normal;vertical-align:top}.payroll-review-table td{white-space:nowrap}.payroll-review-table th:nth-child(3){min-width:240px}
+
+/* Keep each health participant and their monthly amounts on one desktop row. */
+.health-member{grid-template-columns:60px minmax(0,1.4fr) repeat(3,minmax(0,1fr)) 80px;gap:12px;align-items:end}
+.health-member-dated{grid-template-columns:60px minmax(0,1.4fr) 125px repeat(3,minmax(0,1fr)) 80px}
+.health-member>label{min-width:0}
+.health-member input{width:100%;min-width:0}
+.health-member>button{order:1}
+.health-member>.status{align-self:center}
+.health-member>.health-pricing-breakdown{display:contents}
+.health-member>.health-pricing-breakdown label{font-size:13px}
+@media(max-width:1200px){
+ .health-member,.health-member-dated{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .health-member>.status,.health-member>button{margin-top:0}
+ .health-member>.health-pricing-breakdown{display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:480px){
+ .health-member,.health-member-dated,.health-member>.health-pricing-breakdown{grid-template-columns:minmax(0,1fr)}
+}

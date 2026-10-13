@@ -1,0 +1,35 @@
+begin;
+do $$
+declare token text;items jsonb;
+begin
+ assert not exists(select 1 from public.periods where month in('2000-01','2000-02')),'Synthetic period exists';
+ insert into public.periods(month,status,commission_status) values('2000-01','closed','closed'),('2000-02','open','open');
+ insert into public.employees(id,registration,active) values('test-inclusion-dsr','TEST-INCLUSION-DSR',1);
+ insert into public.versions(employee,month,data) values('test-inclusion-dsr','2000-01','{"D":"2000-01-01","C":"Pessoa fictícia"}');
+ insert into public.records(month,employee,data,revision) values('2000-01','test-inclusion-dsr','{"historical":"unchanged"}',77);
+ token:=public.finance_calculation_snapshot('2000-02')->>'token';
+ items:='[{"employee":"test-inclusion-dsr","data":"{\"U\":\"100.00\",\"P\":\"Sim\",\"K\":\"1234.56\"}"}]';
+ assert not public.include_finance_employee('2000-02','test-inclusion-dsr','test-inclusion',repeat('0',32),items),'Stale accepted';
+ assert public.include_finance_employee('2000-02','test-inclusion-dsr','test-inclusion',token,items),'Include failed';
+ token:=public.finance_calculation_snapshot('2000-02')->>'token';
+ assert public.include_finance_employee('2000-02','test-inclusion-dsr','test-inclusion',token,'[]'),'Idempotence failed';
+ assert (select count(*)=1 from public.records where month='2000-02'),'Duplicate inserted';
+ token:=public.finance_record_action_snapshot('2000-02')->>'token';
+ items:='[{"employee":"test-inclusion-dsr","revision":99,"data":"{\"U\":\"100.00\",\"P\":\"Sim\",\"T\":\"16.00\",\"K\":\"1234.56\"}"}]';
+ assert not public.save_finance_dsr('2000-02','test-inclusion',token,25,4,0,items),'Bad revision accepted';
+ assert not exists(select 1 from public.dsr_settings where month='2000-02'),'Partial calendar written';
+ items:=jsonb_set(items,'{0,revision}','1');
+ assert public.save_finance_dsr('2000-02','test-inclusion',token,25,4,0,items),'DSR rejected';
+ assert (select revision=1 and useful=25 and rest=4 from public.dsr_settings where month='2000-02'),'Calendar wrong';
+ assert (select revision=2 and data::jsonb->>'T'='16.00' and data::jsonb->>'K'='1234.56' from public.records where month='2000-02'),'Record wrong';
+ assert not public.save_finance_dsr('2000-02','test-inclusion',token,25,4,0,items),'Stale calendar accepted';
+ update public.periods set commission_status='closed' where month='2000-02';
+ token:=public.finance_record_action_snapshot('2000-02')->>'token';
+ assert not public.save_finance_dsr('2000-02','test-inclusion',token,25,4,1,jsonb_set(items,'{0,revision}','2')),'Closed commission accepted';
+ assert (select revision=77 and data='{"historical":"unchanged"}' from public.records where month='2000-01'),'History changed';
+ assert (select count(*)=3 from public.audit where actor='test-inclusion'),'Audit missing';
+ assert not has_function_privilege('anon','public.include_finance_employee(text,text,text,text,jsonb)','execute');
+ assert not has_function_privilege('authenticated','public.save_finance_dsr(text,text,text,integer,integer,integer,jsonb)','execute');
+end $$;
+select 'PASS: inclusion idempotence, CAS, DSR atomic revision/calendar guards, closed commission, history, audit and server-only access' as result;
+rollback;
