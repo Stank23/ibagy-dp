@@ -13,4 +13,6 @@ Os PDFs usam diagramas vetoriais, logo existente e texto selecionável. O HTML �
 
 Fonte e geração: [tools/documentation](../tools/documentation/README.md). Após alterações, revisar conteúdo, links, renderização e consistência com AGENTS.md.
 
+Rodada atual: [cadastros fictícios e validação funcional](fictional-validation-2026-10-13.md), com resultados separados de código, banco e interface.
+
 Evidências complementares: [limpeza](repository-cleanup.md), [inventário dos 323 arquivos](repository-audit.json) e [segurança](security-validation-2026-10-13.md). Os documentos anteriores têm datas e escopos próprios; não representam automaticamente o estado atual.
