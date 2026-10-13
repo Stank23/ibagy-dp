@@ -2,6 +2,8 @@
 
 ## Branch de migração · ainda não liberada para produção
 
+- Senha temporária com troca obrigatória no primeiro acesso: bloqueio antes da sessão financeira, senha pessoal distinta, revogação e criação de sessão em transação auditada.
+
 - Integrações financeiras com Supabase, transações, revisões e preservação do histórico mensal.
 - Comissão com botão único; calendários DSR por cidade com Florianópolis como padrão e exceções individuais.
 - Exportações de saúde com colunas conforme a quantidade de dependentes.
