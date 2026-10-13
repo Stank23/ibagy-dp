@@ -34,14 +34,17 @@ if(body.action==='login'){
  const username=String(body.username||'').trim().toLowerCase(),password=String(body.password||'');
  if(!/^[a-z0-9._-]{3,60}$/.test(username)||!password||password.length>256)return json({error:'Usuário ou senha incorretos.'},401);
  if(!await reserveAuthAttempt('login-account',username,10,900000))return json({error:'Limite de requisições atingido.'},429);
- const rows=await supabaseAdminRequest<any[]>('/rest/v1/app_users?select=id,username,name,role,salt,password_hash,active&username=eq.'+encodeURIComponent(username)+'&active=eq.1&limit=1');
+ const rows=await supabaseAdminRequest<any[]>('/rest/v1/app_users?select=id,username,name,role,salt,password_hash,active,must_change_password&username=eq.'+encodeURIComponent(username)+'&active=eq.1&limit=1');
  const user=rows[0],computed=await passwordHash(password,user?.salt||'invalid-account');
  if(!user||!equal(computed,user.password_hash))return json({error:'Usuário ou senha incorretos.'},401);
- if(!validPassword(password))return json({passwordChangeRequired:true,message:PASSWORD_RULE});
+ const mustChange=user.must_change_password===true||!validPassword(password);
+ if(mustChange&&body.newPassword===undefined)return json({passwordChangeRequired:true,message:'Defina uma nova senha pessoal para continuar.'},200,{'Set-Cookie':sessionCookie('',0)});
+ if(body.newPassword!==undefined&&(!mustChange||typeof body.newPassword!=='string'||!validPassword(body.newPassword)||body.newPassword===password))return json({error:'Escolha uma senha diferente da temporária. '+PASSWORD_RULE},400);
  const token=hex(crypto.getRandomValues(new Uint8Array(32))),tokenHash=await digest(token),now=Date.now();
  const old=requestSession(request);
  const oldHash=old&&/^[a-f0-9]{64}$/.test(old)?await digest(old):null;
- const saved=await supabaseAdminRequest<boolean>('/rest/v1/rpc/create_finance_auth_session',{method:'POST',body:{p_user:user.id,p_expected_hash:computed,p_token:tokenHash,p_expires:now+28800000,p_now:now,p_old_token:oldHash}});
+ const changeSalt=mustChange?hex(crypto.getRandomValues(new Uint8Array(16))):null;
+ const saved=await supabaseAdminRequest<boolean>('/rest/v1/rpc/'+(mustChange?'change_finance_password_and_session':'create_finance_auth_session'),{method:'POST',body:{p_user:user.id,p_expected_hash:computed,p_token:tokenHash,p_expires:now+28800000,p_now:now,p_old_token:oldHash,...(mustChange?{p_salt:changeSalt,p_hash:await passwordHash(body.newPassword,changeSalt!)}:{})}});
  if(!saved)return json({error:'Usuário ou senha incorretos.'},401);
  return json({ok:true},200,{'Set-Cookie':sessionCookie(token)});
 }

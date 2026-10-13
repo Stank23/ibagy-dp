@@ -10,6 +10,7 @@ export type AuthUser = {
   salt: string;
   password_hash: string;
   active: number;
+  must_change_password: boolean;
 };
 
 function filterValue(value: string): string {
@@ -19,7 +20,7 @@ function filterValue(value: string): string {
 
 export async function findActiveUserByUsername(username: string): Promise<AuthUser | null> {
   const rows = await supabaseAdminRequest<AuthUser[]>(
-    `/rest/v1/app_users?select=id,username,name,email,role,salt,password_hash,active&username=eq.${filterValue(username)}&active=eq.1&limit=1`,
+    `/rest/v1/app_users?select=id,username,name,email,role,salt,password_hash,active,must_change_password&username=eq.${filterValue(username)}&active=eq.1&limit=1`,
   );
   return rows[0] ?? null;
 }
@@ -31,7 +32,7 @@ export async function findActiveSessionUser(tokenHash: string, now = Date.now())
   );
   if (!sessions[0]) return null;
   const users = await supabaseAdminRequest<Array<Pick<AuthUser, 'id' | 'username' | 'name' | 'role'>>>(
-    `/rest/v1/app_users?select=id,username,name,role&id=eq.${filterValue(sessions[0].user_id)}&active=eq.1&limit=1`,
+    `/rest/v1/app_users?select=id,username,name,role&id=eq.${filterValue(sessions[0].user_id)}&active=eq.1&must_change_password=eq.false&limit=1`,
   );
   return users[0] ?? null;
 }
@@ -39,7 +40,7 @@ export async function findActiveSessionUser(tokenHash: string, now = Date.now())
 export async function createSession(tokenHash: string, userId: string, expires: number): Promise<void> {
   if (!/^[a-f0-9]{64}$/.test(tokenHash) || !Number.isSafeInteger(expires)) throw new Error('Sessão inválida');
   const user = await supabaseAdminRequest<Array<{id: string}>>(
-    `/rest/v1/app_users?select=id&id=eq.${filterValue(userId)}&active=eq.1&limit=1`,
+    `/rest/v1/app_users?select=id&id=eq.${filterValue(userId)}&active=eq.1&must_change_password=eq.false&limit=1`,
   );
   if (!user[0]) throw new Error('Conta inativa');
   await supabaseAdminRequest('/rest/v1/app_sessions', {
