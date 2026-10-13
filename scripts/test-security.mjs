@@ -45,3 +45,12 @@ const api=read('/api/auth');api.nextUrl=new URL(api.url);limited=true;response=a
 fail=true;response=await GET(read());assert.equal(response.status,503);assert.equal((await response.text()).includes('SECRET_INTERNAL_ERROR'),false);fail=false;
 process.env.VERCEL='1';const {clientAddress}=await import('../lib/rate-limit.ts');assert.equal(clientAddress(read('/',{'cf-connecting-ip':'spoofed'})),'unknown');assert.equal(clientAddress(read('/',{'x-vercel-forwarded-for':'198.51.100.1','cf-connecting-ip':'spoofed'})),'198.51.100.1');
 console.log('PASS: auth origin/login/CAS/cookie/rate limits; anonymous/viewer restrictions; self-account guards; atomic admin RPC; diagnostic protection; read CSRF; proxy headers/methods/rate limits; sanitized errors; trusted IP source (HTTP mocks).');
+
+const {downloadResponse}=await import('../lib/download-response.ts');
+const attachment=downloadResponse('test','x\r\nInjected:bad.html','application/octet-stream');
+assert.equal(attachment.headers.has('Injected'),false);assert.match(attachment.headers.get('content-disposition'),/^attachment/);assert.equal(attachment.headers.get('x-content-type-options'),'nosniff');
+const {payrollExport}=await import('../lib/payroll-export.ts');const XLSX=await import('xlsx');
+const hostile='=HYPERLINK("https://example.invalid","test")';
+const file=payrollExport('commission','2026-11',[{data:JSON.stringify({B:'TESTE',C:hostile,U:'1.00',T:'0.00'})}]);const sheet=XLSX.read(file.bytes,{type:'array'}).Sheets.Ibagy;
+assert.equal(sheet.B2.v,hostile);assert.equal(sheet.B2.t,'s');assert.equal(sheet.B2.f,undefined);
+console.log('PASS: attachment filename header injection rejected and untrusted spreadsheet names remain text, without formula execution.');

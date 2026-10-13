@@ -16,11 +16,13 @@ Escopo: branch migracao-vercel-supabase, Supabase fyaogkhkykntzparaojd e preview
 - Após correção: zero concessões diretas públicas às tabelas. Isso não autoriza acesso direto do navegador: a arquitetura continua usando autenticação própria e service_role exclusivamente no servidor.
 - test:security: handlers reais com transporte simulado verificam login, senha incorreta, CAS, cookies, registro pendente sem escalada de perfil, limites, anônimo/viewer/admin, CSRF de leitura/escrita, erros sanitizados e proxy.
 - supabase/tests/security_hardening.sql: banco real com rollback verifica permissões, bucket privado, limite de sessões, login com hash antigo recusado, revogação atômica por senha/perfil, conta inativa, proteções de administrador e auditoria sem hash.
+- Arquivo de download: nome com CR/LF não injeta cabeçalho e entrega é attachment/nosniff. Nome de colaborador começando com fórmula foi lido do Excel como texto, sem célula de fórmula.
+- Advisors do Supabase: apenas 23 avisos INFO de RLS sem políticas, coerentes com acesso exclusivo pelo backend; nenhum WARN/ERROR reportado.
 - Suítes de migração, 137 campos/33 ações, arquivos, edição, prioridades financeiras, DSR e exportação de saúde passaram após as mudanças.
 
 ## Limites e verificações ainda necessárias
 
-Build e testes HTTP/browser do novo preview devem ser confirmados após publicação do commit. A sessão TinyFish anterior expirou.
+Build do commit 6dd4778 confirmado READY na Vercel. O teste TinyFish 477e796b-6f43-46ac-8e77-991c42a488b5 foi bloqueado pela autenticação de equipe da Vercel, antes de chegar à aplicação. O conector retornou 403 ao solicitar acesso temporário, incluindo tentativa com a equipe explícita. Portanto status/cabeçalhos e login/perfis/logout no deployment não foram comprovados. Duas contas fictícias temporárias foram criadas para essa tentativa; ambas foram removidas e não chegaram a gerar sessões. É necessário um link temporário de acesso ao preview ou conexão Vercel com acesso ao projeto/equipe para continuar.
 
 O transporte HTTP do shell não alcança o proxy de rede; npm audit/consulta atualizada ao registro de dependências não foi executada. Não afirmar ausência de dependências vulneráveis.
 
