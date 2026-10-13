@@ -33,3 +33,15 @@ CSP de HTML mantém unsafe-inline para compatibilidade com a aplicação; migra�
 Os testes de revisão/CAS cobrem conflitos e atomicidade no banco, mas não constituem teste de carga concorrente multi-processo. Teste independente de intrusão, recuperação de backups, limites de retenção e rotação de credenciais permanecem fora desta evidência.
 
 Não considerar o sistema liberado para produção com base neste relatório.
+
+## Retomada com link temporário do proprietário
+
+O link de compartilhamento fornecido em 13/10 permitiu chegar à tela de login IBAGY DP. O token do link e as senhas fictícias não são incluídos neste relatório.
+
+- Run 7f43d945-2611-4519-82d7-2f00f76d6aad: tentativa de testar status/cabeçalhos das APIs por navegação/fetch ficou inconclusiva por timeout da ferramenta. Não comprova HTTP 401/403/400/200 no deployment.
+- Run e2665bf5-9319-4bfd-9861-fbbdd2b278b6: login real de conta fictícia viewer passou; nome esperado exibido; Administração ausente; Sair retornou à tela de login.
+- Run c8403924-b466-4d84-8b93-e556880cdca3: login e logout de conta fictícia admin passaram. O item Administração não estava na área inicialmente visível.
+- Run 8f22fe92-56ad-49a0-9f78-da3f281579b4: ao rolar o painel lateral, Administração apareceu abaixo de Reajustes; item confirmado no DOM. Não foi aberta a lista de contas reais. Não foi confirmada falha de permissão.
+- Após o último logout, as duas contas temporárias foram removidas. Consulta ao banco confirmou zero contas e zero sessões desses identificadores. Nenhuma conta existente, senha ou lançamento foi alterado.
+
+Os testes da interface agora comprovam login/logout e apresentação dos dois perfis. A matriz HTTP autenticada, os cabeçalhos reais do preview, dependências atualizadas e carga concorrente continuam pendentes. Os testes locais com handlers reais/transporte simulado e de PostgreSQL com rollback permanecem evidências separadas. A validação completa e liberação de produção não foram declaradas.
