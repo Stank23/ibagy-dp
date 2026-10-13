@@ -9,5 +9,6 @@
 - Limpeza de componentes/demonstrações/duplicatas sem referência funcional e documentação do sistema.
 - Validação com quatro novos cadastros fictícios em 12/2026; comissão e SEREFI pela interface. Correção da atualização automática do auxílio-creche ao alterar salário normativo, preservando o comportamento v77 e meses anteriores/fechados.
 - Total de custos atualizado na mesma gravação do auxílio-creche ou de uma edição que altere a elegibilidade, usando as provisões originais da versão 77.
+- Alteração de calendário DSR também atualiza os custos/provisões pelo motor original. Rodada fictícia inclui exportações e fechamento/reabertura pela interface, e exemplos de reajuste, cursos/multa e rescisão gravados pelo motor/RPC.
 
 Os resultados detalhados, commits e limites de validação estão em docs/. O histórico original da versão 77 e da biblioteca SheetJS permanece no Git e no pacote vendor. Nenhuma regra financeira foi alterada pela limpeza.

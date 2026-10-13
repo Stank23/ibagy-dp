@@ -2,6 +2,7 @@ import {dsrAffectedCity,dsrCities} from './dsr-city';
 import 'server-only';
 import {supabaseAdminRequest} from './supabase-admin';
 import {commissionDays,commissionAmounts} from './commission';
+import {applyProvisions} from './provisions';
 import {CalculationInputError,CalculationConflict} from './supabase-calculation';
 export function dsrChanges(snapshot:any,body:any){
  const city=body.city;if(city!==undefined&&!dsrCities.some(c=>c.id===city))throw new CalculationInputError('Cidade inválida.');
@@ -16,7 +17,7 @@ export function dsrChanges(snapshot:any,body:any){
  for(const row of snapshot.records){
   const d=JSON.parse(row.data);if(!dsrAffectedCity(snapshot.dsr_settings,body.month,city,d.H))continue;let amounts;
   try{amounts=commissionAmounts(d.U||'0',d.commissionNet,days.commissionUseful,days.commissionRest,total);}catch(e){throw new CalculationInputError((e as Error).message);}
-  if(d.P||d.commissionType||Number(d.U||0)>0){Object.assign(d,{T:amounts.T,commissionIR:amounts.commissionIR,commissionUseful:days.commissionUseful,commissionRest:days.commissionRest});records.push({employee:row.employee,revision:row.revision,data:JSON.stringify(d)});}
+  if(d.P||d.commissionType||Number(d.U||0)>0){Object.assign(d,{T:amounts.T,commissionIR:amounts.commissionIR,commissionUseful:days.commissionUseful,commissionRest:days.commissionRest});records.push({employee:row.employee,revision:row.revision,data:JSON.stringify(d._excluded===true?d:applyProvisions(d))});}
  }
  return {city,useful:days.commissionUseful,rest:days.commissionRest,revision,records};
 }
