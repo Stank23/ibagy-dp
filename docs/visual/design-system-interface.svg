@@ -1,0 +1,28 @@
+<svg width="495" height="175" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 175" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495" height="175"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-175)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="495" height="175" rx="12" ry="12" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,96%,98%); fill-rule: evenodd;"/>
+			<rect x="14" y="16" width="467" height="145" rx="8" ry="8" style="stroke: rgb(84%,9%,12%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="140.625" y="140" style="font-family: Doc-Bold; font-size: 10px;fill: rgb(84%,9%,12%); stroke:none;" transform="translate(0,280) scale(1,-1)">Cadastro de mensalidade · exemplo fictício</text>
+			<text x="247.5" y="121" style="font-family: Doc; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,242) scale(1,-1)"></text>
+			<text x="29" y="111" style="font-family: Doc-Bold; font-size: 9px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,222) scale(1,-1)">Participante</text>
+			<rect x="29" y="65" width="130" height="32" rx="5" ry="5" style="stroke: rgb(83%,83%,83%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,98%,98%); fill-rule: evenodd;"/>
+			<text x="37" y="77" style="font-family: Doc; font-size: 9px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,154) scale(1,-1)">Pessoa fictícia</text>
+			<text x="171" y="111" style="font-family: Doc-Bold; font-size: 9px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,222) scale(1,-1)">Integral</text>
+			<rect x="171" y="65" width="88" height="32" rx="5" ry="5" style="stroke: rgb(83%,83%,83%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,98%,98%); fill-rule: evenodd;"/>
+			<text x="179" y="77" style="font-family: Doc; font-size: 9px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,154) scale(1,-1)">R$ 100,00</text>
+			<text x="270" y="111" style="font-family: Doc-Bold; font-size: 9px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,222) scale(1,-1)">Empresa</text>
+			<rect x="270" y="65" width="89" height="32" rx="5" ry="5" style="stroke: rgb(83%,83%,83%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,98%,98%); fill-rule: evenodd;"/>
+			<text x="278" y="77" style="font-family: Doc; font-size: 9px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,154) scale(1,-1)">R$ 30,00</text>
+			<text x="370" y="111" style="font-family: Doc-Bold; font-size: 9px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,222) scale(1,-1)">Líquido</text>
+			<rect x="370" y="65" width="90" height="32" rx="5" ry="5" style="stroke: rgb(83%,83%,83%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,98%,98%); fill-rule: evenodd;"/>
+			<text x="378" y="77" style="font-family: Doc; font-size: 9px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,154) scale(1,-1)">R$ 70,00</text>
+			<text x="29" y="37" style="font-family: Doc; font-size: 8.5px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,74) scale(1,-1)">Ilustração do padrão; não é captura do sistema.</text>
+		</g>
+	</g>
+</svg>

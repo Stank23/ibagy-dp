@@ -53,3 +53,8 @@ next-env.d.ts
 *.dump
 /tools/ui-tests/reports/
 /tools/ui-tests/node_modules/
+
+# Documentation generator caches and isolated Python environment
+__pycache__/
+*.py[cod]
+/tools/documentation/.venv/

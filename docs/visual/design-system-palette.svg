@@ -1,0 +1,30 @@
+<svg width="495" height="175" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 175" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495" height="175"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-175)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="495" height="175" rx="12" ry="12" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,96%,98%); fill-rule: evenodd;"/>
+			<rect x="15" y="73" width="67" height="63" rx="8" ry="8" style="stroke: rgb(81%,84%,88%); stroke-linecap: butt; stroke-width: 1; fill: rgb(84%,9%,12%); fill-rule: evenodd;"/>
+			<text x="37.9269287109375" y="51" style="font-family: Doc-Bold; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,102) scale(1,-1)">Ação</text>
+			<text x="31.064453125" y="33" style="font-family: Doc; font-size: 8px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,66) scale(1,-1)">#D71920</text>
+			<rect x="94" y="73" width="67" height="63" rx="8" ry="8" style="stroke: rgb(81%,84%,88%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,9%,9%); fill-rule: evenodd;"/>
+			<text x="115.3747314453125" y="51" style="font-family: Doc-Bold; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,102) scale(1,-1)">Texto</text>
+			<text x="110.693359375" y="33" style="font-family: Doc; font-size: 8px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,66) scale(1,-1)">#171717</text>
+			<rect x="173" y="73" width="67" height="63" rx="8" ry="8" style="stroke: rgb(81%,84%,88%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,96%,96%); fill-rule: evenodd;"/>
+			<text x="193.07177734375" y="51" style="font-family: Doc-Bold; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,102) scale(1,-1)">Fundo</text>
+			<text x="190.361328125" y="33" style="font-family: Doc; font-size: 8px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,66) scale(1,-1)">#F6F6F6</text>
+			<rect x="252" y="73" width="67" height="63" rx="8" ry="8" style="stroke: rgb(81%,84%,88%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="272.1751220703125" y="51" style="font-family: Doc-Bold; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,102) scale(1,-1)">Painel</text>
+			<text x="270.029296875" y="33" style="font-family: Doc; font-size: 8px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,66) scale(1,-1)">#FFFFFF</text>
+			<rect x="331" y="73" width="67" height="63" rx="8" ry="8" style="stroke: rgb(81%,84%,88%); stroke-linecap: butt; stroke-width: 1; fill: rgb(45%,45%,45%); fill-rule: evenodd;"/>
+			<text x="340.8203857421875" y="51" style="font-family: Doc-Bold; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,102) scale(1,-1)">Secundário</text>
+			<text x="347.693359375" y="33" style="font-family: Doc; font-size: 8px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,66) scale(1,-1)">#737373</text>
+			<rect x="410" y="73" width="67" height="63" rx="8" ry="8" style="stroke: rgb(81%,84%,88%); stroke-linecap: butt; stroke-width: 1; fill: rgb(89%,89%,89%); fill-rule: evenodd;"/>
+			<text x="430.6249755859375" y="51" style="font-family: Doc-Bold; font-size: 8.3px;fill: rgb(9%,9%,9%); stroke:none;" transform="translate(0,102) scale(1,-1)">Borda</text>
+			<text x="426.880859375" y="33" style="font-family: Doc; font-size: 8px;fill: rgb(32%,37%,44%); stroke:none;" transform="translate(0,66) scale(1,-1)">#E5E5E5</text>
+		</g>
+	</g>
+</svg>

@@ -377,7 +377,7 @@
       "sha256": "2d0d04559952ce9c9a327cca499f4b99f35d885cccfce375230e116695d3f155",
       "lines": 37,
       "format": ".tsx",
-      "decision": "retained_or_documentation_updated"
+      "decision": "removed_unused"
     },
     {
       "path": "components/ui/accordion.tsx",
@@ -1393,7 +1393,7 @@
       "sha256": "a22edf13d6873ae832c4a2a0d579fc666c73ec996ef0722d39172649d38f0871",
       "lines": 84,
       "format": ".mts",
-      "decision": "retained_or_documentation_updated"
+      "decision": "removed_unused"
     },
     {
       "path": "lib/connector-preview.d.ts",
@@ -1409,7 +1409,7 @@
       "sha256": "1c93d747e384c8e17e3e3dd5361b24412babf5eba2a11d2ae7a75f4e0924112c",
       "lines": 14,
       "format": ".ts",
-      "decision": "retained_or_documentation_updated"
+      "decision": "removed_unused"
     },
     {
       "path": "lib/cpf.ts",
@@ -1665,7 +1665,7 @@
       "sha256": "c00ccd925d88933271208138d01bc610c5c6ade70cd08d6605326536762b08e7",
       "lines": 3,
       "format": ".ts",
-      "decision": "retained_or_documentation_updated"
+      "decision": "removed_unused"
     },
     {
       "path": "lib/rules.ts",
@@ -1801,7 +1801,7 @@
       "sha256": "52fa80dc69c1a1ddf6d4a7599ce9abdbe9990ee5f121f46550c6cc6fb11cbcd8",
       "lines": 114,
       "format": ".ts",
-      "decision": "retained_or_documentation_updated"
+      "decision": "removed_unused"
     },
     {
       "path": "lib/supabase-rate-limit.ts",

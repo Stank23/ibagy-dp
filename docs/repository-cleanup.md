@@ -2,7 +2,7 @@
 
 Inventário inicial: **323 arquivos lidos** (320 texto e 3 binários), total de 7.817.342 bytes. A revisão combinou leitura de conteúdo, grafo de imports, referências em scripts/configurações, comparação de duplicatas e testes.
 
-Removidos: **60 arquivos**, 3,581,302 bytes (~3,42 MiB), mais 13 dependências diretas. Nenhuma fórmula de folha, tabela de banco, migration, seed, licença ou registro mensal foi excluído.
+Removidos: **65 arquivos**, 3,590,475 bytes (~3.42 MiB), mais 13 dependências diretas. Nenhuma fórmula de folha, tabela de banco, migration, seed, licença ou registro mensal foi excluído.
 
 ## Critérios
 
@@ -76,6 +76,11 @@ Removidos: **60 arquivos**, 3,581,302 bytes (~3,42 MiB), mais 13 dependências d
 | `SHA256SUMS.txt` | Inventário do ZIP desatualizado |
 | `ARVORE-DE-ARQUIVOS.txt` | Inventário do ZIP desatualizado |
 | `vendor/.gitkeep` | Placeholder sem função; vendor possui arquivos |
+| `lib/roster.ts` | Helper/adapter/componente sem consumidor; implementações ativas preservadas |
+| `lib/supabase-payroll-repository.ts` | Helper/adapter/componente sem consumidor; implementações ativas preservadas |
+| `lib/connectors.ts` | Helper/adapter/componente sem consumidor; implementações ativas preservadas |
+| `components/connector-error.tsx` | Helper/adapter/componente sem consumidor; implementações ativas preservadas |
+| `lib/connector-errors.mts` | Helper/adapter/componente sem consumidor; implementações ativas preservadas |
 
 ## Dependências diretas removidas
 
@@ -94,4 +99,4 @@ React DOM, Radix, SheetJS, Zod, Next e as ferramentas ainda referenciadas foram 
 
 ## Verificação
 
-Testes de migração, campos, arquivos e segurança passaram após as exclusões. As demais suítes e o build Vercel serão registrados ao terminar. Sem modificação em main e sem liberação de produção.
+As dez suítes locais passaram após a limpeza inicial; package.json e o importer do lockfile têm chaves/specifiers iguais. O build Vercel da limpeza inicial (277a1df) ficou READY. A revisão final também removeu cinco helpers/adapters sem consumidor; o build do commit final será conferido antes da entrega. Sem modificação em main e sem liberação de produção.
