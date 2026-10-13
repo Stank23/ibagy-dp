@@ -29,6 +29,8 @@ O motor original v77 gerou a competência, com gravação por `save_calculated_f
 
 Run `6daf7f14-ef7c-49fb-abf7-a591b5ab5350`: comissão bruta de 600,00 e líquida de 500,00 salva pelo botão único e conferida após recarga em TEST-FULL-001; DSR 115,38 confirmado no banco. Empréstimo de 1.000,00 em duas parcelas cadastrado pela interface para TEST-FULL-002, cronograma conferido em Ver parcelas e confirmado no banco (502,80 em 12/2026 e 500,00 em 01/2027). Logout concluído. Nenhuma outra linha foi editada nesse run.
 
+Run `c1570cf3-ed34-415c-9572-8ee6f6e9685e`: mensalidades salvas e recarregadas para TEST-FULL-001, com titular/dependente Unimed (420,00 cada) e titular/dependente Uniodonto (45,00 cada). Nome vazio do dependente foi recusado; após preencher, gravação aprovada. Coparticipação Unimed de 10,00/20,00 persistiu. Filho fictício nascido em 15/01/2020 salvo pela interface, último crédito 01/2027 e situação Elegível em 12/2026. Banco confirmou quatro participantes, uma criança, AG 420,00 e revisão 5. Logout não foi executado antes do limite da ferramenta; sessão deve ser revogada na limpeza da conta temporária. Nenhum teste de duplicação de criança foi feito nessa interação.
+
 Run `6286d3c0-d2b9-40ac-828d-d313bda4ba96`: login e cadastro TEST-FULL-001 com sucesso; rejeição de CPF inválido observada. Persistência confirmada por consulta ao banco. Salário, abertura do mês, recarga e logout não concluídos nesta execução.
 
 Run `5eabfe22-1e7c-4fe0-987d-cecfc9836d1c`: diálogo de competência acessado, mas a ferramenta terminou com erro interno ao manipular o mês. Nenhuma competência foi gravada nessa tentativa. Não caracteriza falha comprovada da aplicação. A abertura foi realizada posteriormente pelo motor e pela RPC, com verificação no banco.
@@ -49,4 +51,8 @@ O teste real `finance_configuration_validation.sql` falhou inicialmente: **Norma
 
 Após a correção, o mesmo teste passou: AG 400,00 → 600,00 no mês aberto, salário preservado, revisão incrementada, mês aberto anterior e fechado intactos, repetição sem alteração adicional. Configurações de mínimo, alimentação, Unimed, Uniodonto e função também foram gravadas e relidas em rollback; conflito de revisão de saúde recusado. A aplicação da função não recalculou dados existentes automaticamente.
 
-Advisors de segurança executados após a alteração: sem WARN/ERROR; somente INFO de RLS sem política, conforme a arquitetura de acesso exclusivo pelo servidor. A função continua sem EXECUTE público.
+Uma segunda falha foi observada no registro fictício após cadastrar a criança: AG 420,00 estava salvo, mas DF 6.096,49 ainda não incluía esse auxílio. A soma dos componentes existentes era 6.516,49. O teste foi ampliado e falhou com **Childcare did not refresh total cost**. `refresh_finance_childcare` agora atualiza DF na mesma gravação, usando a expressão original de `lib/provisions.ts`: CS + AG + CT + CY + AP + DE em centavos. A edição de cadastro também aplica `applyProvisions` original após modificar a elegibilidade do auxílio. GET continua sem gravação; nenhuma regra de cálculo foi substituída.
+
+Regressão real inclui componentes de custo não zerados: salário normativo muda AG 400,00 → 600,00 e DF 5.670,00 → 5.870,00, com salário, meses anteriores e fechados preservados. Teste de edição compara DF com o motor v77 quando o gênero muda e o auxílio deixa de ser devido.
+
+Advisors de segurança executados após a primeira alteração: sem WARN/ERROR; somente INFO de RLS sem política, conforme a arquitetura de acesso exclusivo pelo servidor. As funções continuam sem EXECUTE público.

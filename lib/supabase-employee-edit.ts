@@ -3,6 +3,7 @@ import {supabaseAdminRequest} from './supabase-admin';
 import {normalize} from './payroll';
 import {validCPF,formatCPF} from './cpf';
 import {applyChildcare} from './childcare';
+import {applyProvisions} from './provisions';
 import {CalculationConflict,CalculationInputError} from './supabase-calculation';
 const recurring=['gender','B','C','D','E','F','G','H','I','J','K','L','M','N','P','AG','AH','AI','AJ','AL','AN','AO','AP','AQ','AR','AS','AT','AU','AW','AX','AY','BA','BB','BC','BE','BF','BG','BI','BJ','BK','BM','BN','BO','BP','BR','BS','BT','BV','BW','BX','BZ','CA','CB','CD','CE','CF','CH','CU','CV','CW','CX'];
 export function employeeEditChanges(snapshot:any,body:any){
@@ -22,7 +23,7 @@ export function employeeEditChanges(snapshot:any,body:any){
   const b=latest?JSON.parse(latest.data):{},old=JSON.parse(row.data),next={...old,gender:b.gender||'Não informado'};
   if(data.supportGroup!==undefined)next.supportGroup=b.supportGroup===true;
   const normative=[...snapshot.normative_wages,...snapshot.future_normative_wages].filter((r:any)=>r.month<=row.month).sort((a:any,b:any)=>b.month.localeCompare(a.month))[0];
-  const d=next._excluded===true?next:applyChildcare(next,normative,snapshot.childcare_children.filter((c:any)=>c.employee===body.id),row.month);
+  const d=next._excluded===true?next:applyProvisions(applyChildcare(next,normative,snapshot.childcare_children.filter((c:any)=>c.employee===body.id),row.month));
   return {month:row.month,employee:body.id,revision:row.revision,data:JSON.stringify(d)};
  });
  return {data:base,active:body.active===false?0:1,records};

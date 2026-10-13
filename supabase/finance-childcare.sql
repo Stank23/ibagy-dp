@@ -1,13 +1,17 @@
 -- Mirrors v77 childcareRefresh, bounded to the selected month to preserve earlier history.
 create or replace function public.refresh_finance_childcare(p_month text,p_employee text default null)
 returns integer language plpgsql security invoker set search_path='' as $$
-declare r record;children jsonb;normative bigint;receives boolean;next jsonb;changed integer:=0;
+declare r record;children jsonb;normative bigint;receives boolean;next jsonb;changed integer:=0;total_cents bigint;
 begin
  for r in select rec.* from public.records rec join public.periods p on p.month=rec.month where rec.month>=p_month and p.status='open' and coalesce(rec.data::jsonb->>'_excluded','false')<>'true' and (p_employee is null or rec.employee=p_employee) order by rec.month,rec.employee loop
   select coalesce(jsonb_agg(jsonb_build_object('id',c.id,'name',c.child_name,'birthDate',c.birth_date,'lastCredit',c.last_credit) order by c.id),'[]') into children from public.childcare_children c where c.employee=r.employee and c.start<=r.month and left(c.birth_date,7)<=r.month and c.last_credit>=r.month;
   normative:=coalesce((select amount from public.normative_wages where month<=r.month order by month desc limit 1),0);
   receives:=coalesce(r.data::jsonb->>'gender','')='Feminino' and jsonb_array_length(children)>0;
   next:=r.data::jsonb||jsonb_build_object('AG',case when receives then to_char(round(normative*0.2)/100,'FM999999999990.00') else '0.00' end,'receivesChildcare',receives,'_normativeWage',normative,'_childcareChildren',children);
+  -- v77 applyProvisions: DF = CS + AG + CT + CY + AP + DE, in cents.
+  -- Refresh the only cost dependent on AG in this same write; GET stays read-only.
+  select sum(round(coalesce(nullif(next->>cost.key,''),'0')::numeric*100)) into total_cents from unnest(array['CS','AG','CT','CY','AP','DE']) as cost(key);
+  next:=jsonb_set(next,'{DF}',to_jsonb(to_char(total_cents::numeric/100,'FM999999999990.00')));
   if next is distinct from r.data::jsonb then update public.records set data=next::text,revision=revision+1 where month=r.month and employee=r.employee;changed:=changed+1;end if;
  end loop;
  return changed;
