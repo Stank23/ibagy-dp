@@ -1,5 +1,11 @@
 # Alterações do IBAGY DP
 
+## 14/10/2026 · Quitação SEREFI e conferência
+
+- Quitação antecipada por pagamento fora da folha: prévia, data e referência, cronograma original preservado, atualização de folhas abertas pelo motor v77, auditoria e proteção contra conflitos/repetições.
+- Conferência com colunas alternadas sem cor e rosa pastel, incluindo cabeçalhos e ações.
+- Testes fictícios de domínio, HTTP e transação PostgreSQL com rollback; validação visual autenticada ainda pendente.
+
 ## Branch de migração · ainda não liberada para produção
 
 - Senha temporária com troca obrigatória no primeiro acesso: bloqueio antes da sessão financeira, senha pessoal distinta, revogação e criação de sessão em transação auditada.

@@ -82,3 +82,7 @@ Manter PRD, Design System, Architecture e Agent Instructions consistentes com o 
 
 > Não declarar a migração concluída nem recomendar produção prematuramente.
 
+
+## Validação da quitação SEREFI
+
+Executar `npm run test:loans`, regressões do motor e testes HTTP. O teste SQL `supabase/tests/finance_loan_settlement.sql` usa dados fictícios e rollback. Confirmar que pagamentos externos não são descontados novamente, outras dívidas e comissões fechadas são preservadas, datas e prévias obsoletas são rejeitadas, e o histórico do contrato permanece recuperável. Não sobrescrever ou apagar o arquivo financeiro privado.
