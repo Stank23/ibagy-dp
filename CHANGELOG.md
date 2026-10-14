@@ -1,5 +1,10 @@
 # Alterações do IBAGY DP
 
+## Versão 2.00.01
+
+- Identificação pública da versão no cabeçalho e metadados do sistema. O pacote utiliza a versão SemVer equivalente `2.0.1`.
+- As referências históricas à versão 77 continuam identificando o motor original de cálculo.
+
 ## 14/10/2026 · Quitação SEREFI e conferência
 
 - Quitação antecipada por pagamento fora da folha: prévia, data e referência, cronograma original preservado, atualização de folhas abertas pelo motor v77, auditoria e proteção contra conflitos/repetições.
