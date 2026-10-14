@@ -1,9 +1,9 @@
 import {money} from './payroll';
 import {monthLabel} from './choices';
-type Row={id:string;employee:string;amount:number;count:number;start:string;end:string};
+type Row={id:string;employee:string;amount:number;count:number;start:string;end:string;settled_month?:string|null;settled_amount?:number|null};
 export function loanSummary(loans:Row[],installments:any[],month:string){
- const active=loans.filter(l=>l.end>=month),finished=loans.filter(l=>l.end<month),ids=new Set(active.map(l=>l.id));
- return {active,finished,disbursed:active.filter(l=>l.start===month).reduce((s,l)=>s+Number(l.amount),0),received:installments.filter(i=>ids.has(i.loan)&&i.month===month).reduce((s,i)=>s+Number(i.amount),0)};
+ const active=loans.filter(l=>l.end>=month&&(!l.settled_month||l.settled_month>month)),finished=loans.filter(l=>l.end<month||!!l.settled_month&&l.settled_month<=month),ids=new Set(active.map(l=>l.id));
+ return {active,finished,disbursed:loans.filter(l=>l.start===month).reduce((s,l)=>s+Number(l.amount),0),received:installments.filter(i=>ids.has(i.loan)&&i.month===month).reduce((s,i)=>s+Number(i.amount),0)};
 }
 // PDF with the standard WinAnsi font; no external service or upload is required.
 export function exportLoanPDF(rows:Row[],installments:any[],names:Map<any,any>,month:string,finished:boolean,summary:ReturnType<typeof loanSummary>){
@@ -17,8 +17,8 @@ export function exportLoanPDF(rows:Row[],installments:any[],names:Map<any,any>,m
   const text=(s:string,x:number,y:number,size=10,width?:number)=>{const safe=literal(s),scale=width?Math.min(100,Math.floor((width-12)/(s.length*size*0.65)*100)):100;commands.push(`BT /F1 ${size} Tf ${scale} Tz 1 0 0 1 ${x} ${y} Tm (${safe}) Tj ET`);};
   commands.push('0.65 0.07 0.12 rg');text('IBAGY · Empréstimos SEREFI',left,554,19);commands.push('0.2 0.2 0.2 rg');text(`Competência: ${monthLabel(month)} · ${finished?'Finalizados':'Em andamento'}`,left,532,11);
   const cells=(values:string[],y:number,header=false)=>{if(header)commands.push(`0.92 0.92 0.92 rg ${left} ${y-rowHeight} ${totalWidth} ${rowHeight} re f`);commands.push('0.2 0.2 0.2 rg');let x=left;values.forEach((v,i)=>{text(v,x+6,y-17,header?9:10,widths[i]);x+=widths[i];});};
-  cells(['Colaborador','Valor pago','Parcela base','Parcela do mês','Qtd.','Início','Término'],tableTop,true);
-  page.forEach((row,i)=>{const parts=installments.filter(p=>p.loan===row.id),regular=parts.find(p=>p.number===1)?.principal??Math.floor(row.amount/row.count),current=parts.find(p=>p.month===month)?.amount??0;cells([String(names.get(row.employee)||row.employee),currency(row.amount),currency(regular),currency(current),String(row.count),monthLabel(row.start),monthLabel(row.end)],tableTop-(i+1)*rowHeight);});
+  cells(['Colaborador','Valor pago','Parcela base','Parcela do mês','Qtd.','Início','Término/quitação'],tableTop,true);
+  page.forEach((row,i)=>{const parts=installments.filter(p=>p.loan===row.id),regular=parts.find(p=>p.number===1)?.principal??Math.floor(row.amount/row.count),current=parts.find(p=>p.month===month)?.amount??0;cells([String(names.get(row.employee)||row.employee),currency(row.amount),currency(regular),currency(current),String(row.count),monthLabel(row.start),row.settled_month&&row.settled_month<=month?'Quitado '+monthLabel(row.settled_month):monthLabel(row.end)],tableTop-(i+1)*rowHeight);});
   const bottom=tableTop-(page.length+1)*rowHeight;commands.push('0.65 0.65 0.65 RG 0.5 w');let x=left;for(const width of [...widths,0]){commands.push(`${x} ${tableTop} m ${x} ${bottom} l S`);x+=width;}for(let i=0;i<=page.length+1;i++){const y=tableTop-i*rowHeight;commands.push(`${left} ${y} m ${left+totalWidth} ${y} l S`);}
   if(!page.length)text('Nenhum empréstimo nesta relação.',left+6,bottom-22,10);
   if(index===pages.length-1){const y=bottom-38;commands.push('0.2 0.2 0.2 rg');if(!finished){text(`Total desembolsado na competência: ${currency(summary.disbursed)}`,left,y,11);text(`Total de parcelas na competência (com taxa): ${currency(summary.received)}`,left,y-20,11);}else text('Registros históricos, excluídos dos totais da competência.',left,y,10);text('Recebimentos conforme o cronograma de cobrança. Taxa de R$ 2,80 apenas na primeira parcela.',left,y-42,9);}

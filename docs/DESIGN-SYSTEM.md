@@ -85,3 +85,7 @@ No celular, controles de toque devem ter alvo de pelo menos 44 px. A largura da 
 
 > Evitar expor nomes/valores reais em capturas e documentos de teste.
 
+
+## Conferência e quitação SEREFI
+
+Na Conferência da Folha, alternar colunas sem preenchimento e rosa pastel `#fce7ef`, iniciando sem cor; aplicar a mesma sequência aos cabeçalhos, células e ações. O diálogo de quitação informa pagamento fora da folha, data, referência opcional, prévia do saldo e confirmação separada.

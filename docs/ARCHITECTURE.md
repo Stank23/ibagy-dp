@@ -82,3 +82,7 @@ SQLs em supabase/ representam fases e substituições de funções. Eles não fo
 
 > Veja docs/security-validation-2026-10-13.md. Build/teste aprovado não autoriza merge em main.
 
+
+## Quitação antecipada SEREFI
+
+`lib/supabase-loan-settlement.ts` usa snapshots por competência e o motor v77 para recalcular os registros afetados. RPCs em `supabase/finance-loan-settlement.sql` validam token, revisões e competências, e persistem quitação, cronograma original, cobranças zeradas e auditoria na mesma transação. Somente `service_role` pode executar; API exige administrador e mesma origem. O arquivo privado do reinício reversível permanece intocado.

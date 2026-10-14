@@ -82,3 +82,7 @@ Código financeiro integrado e testes existentes passaram; isso não equivale a 
 
 > A main permanece protegida. Este documento não autoriza merge ou publicação em produção.
 
+
+## Quitação antecipada SEREFI
+
+Pagamento externo à folha, mediante prévia do saldo e confirmação com data e referência opcional. Preservar o contrato e cronograma original; zerar apenas cobranças da competência escolhida em diante e recalcular folhas abertas pelo motor v77. Bloquear parcelas em meses fechados e conflitos com rescisões. Auditoria e rejeição de gravações concorrentes/repetidas obrigatórias.

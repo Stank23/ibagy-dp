@@ -8,6 +8,7 @@ globalThis.__financeTestRequest=async(path,options)=>{
  calls.push({path,options});
  if(path.endsWith('/reserve_auth_attempt'))return !limited;
  if(fail)throw Error('Sensitive internal database details');
+ if(path.endsWith('/finance_loan_settlement_snapshot'))return {token:'b'.repeat(32),snapshot:{loan:{id:'synthetic-loan',employee:'synthetic-employee'},installments:[{loan:'synthetic-loan',month:'2026-10',amount:10000}],calculations:[{month:'2026-10',snapshot:{period:{status:'open'},records:[],installments:[],employees:[],versions:[],allowances:[],minimum_wages:[],normative_wages:[],unimed_rates:[],uniodonto_fixed_rates:[],event_plans:[],childcare_children:[]}}]}};
  if(path.endsWith('/finance_calculation_snapshot'))return {token:'a'.repeat(32),snapshot:{period,employees:[],versions:[],records,allowances:[],minimum_wages:[],normative_wages:[],unimed_rates:[],uniodonto_fixed_rates:[],installments:[],event_plans:[],childcare_children:[]}};
  return result;
 };
@@ -43,3 +44,19 @@ assert.equal((await run({action:'record',month:'2026-10',employee:'synthetic-emp
 period={status:'closed',commission_status:'closed'};assert.equal((await run({action:'recalculate',month:'2026-10'})).status,409);assert.equal(calls.length,2);
 fail=true;const failed=await run({action:'recalculate',month:'2026-10'});assert.equal(failed.status,503);assert.ok(!(await failed.text()).includes('Sensitive'));
 console.log('PASS: finance route origin, login, admin, month, rate limit, calculated/edit RPC, actor, input/revision validation, conflicts, closed period, no-store and sanitized errors (HTTP mocks; not browser E2E)');
+
+fail=false;
+const settlement={month:'2026-10',loan:'synthetic-loan',paymentDate:'2026-10-14',reference:'TESTE'};
+for(const action of ['loan_settlement_preview','loan_settlement']){
+ const b={...settlement,action,token:'b'.repeat(32)};
+ assert.equal((await run(b,'https://attacker.invalid')).status,403);assert.equal(calls.length,0);
+ user=null;assert.equal((await run(b)).status,401);assert.equal(calls.length,0);
+ user={userId:'synthetic-viewer',email:'viewer@example.invalid',role:'viewer'};assert.equal((await run(b)).status,403);assert.equal(calls.length,0);
+ user={userId:'synthetic-admin',email:'admin@example.invalid',role:'admin'};
+ limited=true;assert.equal((await run(b)).status,429);assert.equal(calls.length,1);limited=false;
+ const res=await run(b);assert.equal(res.status,200);assert.equal(res.headers.get('cache-control'),'no-store');
+ if(action==='loan_settlement_preview'){assert.equal((await res.json()).amount,10000);assert.equal(calls.length,2);}else{assert.equal(calls.length,3);assert.equal(calls[2].options.body.p_actor,user.email);assert.equal(calls[2].options.body.p_reference,'TESTE');}
+}
+assert.equal((await run({...settlement,action:'loan_settlement',token:'stale'})).status,409);
+assert.equal((await run({...settlement,action:'loan_settlement_preview',paymentDate:'2026-02-30'})).status,400);
+console.log('PASS: SEREFI settlement HTTP preview/save, CSRF, anonymous/viewer denial, server actor, rate limit, no-store, invalid date and stale preview');

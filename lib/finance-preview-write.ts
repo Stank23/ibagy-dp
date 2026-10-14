@@ -1,3 +1,4 @@
+import {saveLoanSettlement} from './supabase-loan-settlement';
 import 'server-only';
 import {saveTermination} from './supabase-termination';
 import {salaryActions,saveSalary} from './supabase-salary';
@@ -69,6 +70,10 @@ export async function financePreviewWrite(request:Request):Promise<Response>{
    if(!await reserveAuthAttempt('export',user.userId,10,60000))return reply({error:'Limite de exportações atingido.'},429);
    const {exportFinanceFile}=await import('./supabase-files');
    return reply(await exportFinanceFile(body.month,String(body.kind||''),user.email));
+  }
+  if(action==='loan_settlement'||action==='loan_settlement_preview'){
+   if(!await reserveAuthAttempt('finance-write',user.userId,120,60000))return reply({error:'Limite de requisições atingido.'},429);
+   return reply(await saveLoanSettlement(body,user.email));
   }
   if(action==='loan'){
    const amount=String(body.amount??'');
